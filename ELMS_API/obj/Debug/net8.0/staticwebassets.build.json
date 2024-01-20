@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "CuzZs4y8zVKxUzF4DCLLOmB9bRFCJzOdzPc43qGo5+Y=",
+  "Hash": "tfPpWNj+z1QB50XsJDV0XW9YmYFT/rg/NXbJmrbacPo=",
   "Source": "ELMS_API",
   "BasePath": "_content/ELMS_API",
   "Mode": "Default",
@@ -47,10 +47,10 @@
       "OriginalItemSpec": "C:\\Users\\Mohamad Umar M\\.nuget\\packages\\microsoft.aspnetcore.components.quickgrid\\8.0.1\\staticwebassets\\QuickGrid.razor.js"
     },
     {
-      "Identity": "D:\\Work\\SGS\\ELMS-SGS\\ELMS_API\\obj\\Debug\\net8.0\\scopedcss\\bundle\\ELMS_API.styles.css",
+      "Identity": "D:\\Work\\SGS\\Project\\ELMS-SGS\\ELMS_API\\obj\\Debug\\net8.0\\scopedcss\\bundle\\ELMS_API.styles.css",
       "SourceId": "ELMS_API",
       "SourceType": "Computed",
-      "ContentRoot": "D:\\Work\\SGS\\ELMS-SGS\\ELMS_API\\obj\\Debug\\net8.0\\scopedcss\\bundle\\",
+      "ContentRoot": "D:\\Work\\SGS\\Project\\ELMS-SGS\\ELMS_API\\obj\\Debug\\net8.0\\scopedcss\\bundle\\",
       "BasePath": "_content/ELMS_API",
       "RelativePath": "ELMS_API.styles.css",
       "AssetKind": "All",
@@ -63,7 +63,7 @@
       "AssetTraitValue": "ApplicationBundle",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "D:\\Work\\SGS\\ELMS-SGS\\ELMS_API\\obj\\Debug\\net8.0\\scopedcss\\bundle\\ELMS_API.styles.css"
+      "OriginalItemSpec": "D:\\Work\\SGS\\Project\\ELMS-SGS\\ELMS_API\\obj\\Debug\\net8.0\\scopedcss\\bundle\\ELMS_API.styles.css"
     }
   ]
 }
