@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\sgsuser\\Documents\\GitHub\\ELMS-SGS\\Kiruthika_Project\\ELMS_API\\ELMS_API.csproj": {}
+    "D:\\ELMS-SGS\\ELMS_API\\ELMS_API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\sgsuser\\Documents\\GitHub\\ELMS-SGS\\Kiruthika_Project\\ELMS_API\\ELMS_API.csproj": {
+    "D:\\ELMS-SGS\\ELMS_API\\ELMS_API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sgsuser\\Documents\\GitHub\\ELMS-SGS\\Kiruthika_Project\\ELMS_API\\ELMS_API.csproj",
+        "projectUniqueName": "D:\\ELMS-SGS\\ELMS_API\\ELMS_API.csproj",
         "projectName": "ELMS_API",
-        "projectPath": "C:\\Users\\sgsuser\\Documents\\GitHub\\ELMS-SGS\\Kiruthika_Project\\ELMS_API\\ELMS_API.csproj",
+        "projectPath": "D:\\ELMS-SGS\\ELMS_API\\ELMS_API.csproj",
         "packagesPath": "C:\\Users\\sgsuser\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sgsuser\\Documents\\GitHub\\ELMS-SGS\\Kiruthika_Project\\ELMS_API\\obj\\",
+        "outputPath": "D:\\ELMS-SGS\\ELMS_API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\sgsuser\\AppData\\Roaming\\NuGet\\NuGet.Config",
