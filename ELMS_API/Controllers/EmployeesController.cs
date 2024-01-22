@@ -29,6 +29,7 @@ namespace ELMS_API.Controllers
 
         // POST: api/Employees
         [HttpPost]
+        [Route("AddEmployee")]
         public ActionResult<Employee> PostEmployee(EmployeeDTO employeeDto)
         {
             Employee employee = _mapper.Map<Employee>(employeeDto);
@@ -41,9 +42,6 @@ namespace ELMS_API.Controllers
            
         }
 
-        /*private bool EmployeeExists(int id)
-        {
-            return _context.Employees.Any(e => e.EmployeeId == id);
-        }*/
+        
     }
 }

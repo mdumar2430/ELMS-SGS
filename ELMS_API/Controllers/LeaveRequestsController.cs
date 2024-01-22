@@ -27,6 +27,7 @@ namespace ELMS_API.Controllers
         }
 
         [HttpPost]
+        [Route("AddLeaveRequest")]
         public async Task<ActionResult<LeaveRequest>> PostLeaveRequest(LeaveRequestDTO leaveRequestDto)
         {
             LeaveRequest leaveRequest = _mapper.Map<LeaveRequest>(leaveRequestDto);
@@ -38,9 +39,16 @@ namespace ELMS_API.Controllers
 
             return BadRequest("Leave days not available");
         }
-        /*private bool LeaveRequestExists(int id)
+        [HttpPut]
+        [Route("ApproveLeaveRequest")]
+        public ActionResult ApprovePendingLeaveRequest(int leaveRequestId)
         {
-            return _context.LeaveRequests.Any(e => e.RequestId == id);
-        }*/
+            bool isApproved = _leaveRequestService.approveLeaveRequest(leaveRequestId);
+            if(isApproved)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
     }
 }
