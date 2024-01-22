@@ -17,7 +17,7 @@ export class UserService {
 
   userLogin(body:any):Observable<boolean>{
     const buffer = Buffer.from(body.Password, 'utf-8');
-    var user={"emailid":body.Email,"password":buffer.toString('base64')}
-    return this.http.post<boolean>('https://localhost:44334/api/Login', user)
+    var user={"Email":body.Email,"Password":buffer.toString('base64')}
+    return this.http.post<boolean>('https://localhost:7034/api/Login', user)
   }
 }
