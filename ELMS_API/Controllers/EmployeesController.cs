@@ -9,6 +9,7 @@ using ELMS_API.Data;
 using ELMS_API.Models;
 using AutoMapper;
 using ELMS_API.DTO;
+using ELMS_API.Interfaces;
 
 namespace ELMS_API.Controllers
 {
@@ -16,30 +17,33 @@ namespace ELMS_API.Controllers
     [ApiController]
     public class EmployeesController : ControllerBase
     {
-        private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IEmployeeService _employeeService;
 
-        public EmployeesController(AppDbContext context, IMapper mapper)
+        public EmployeesController(IEmployeeService employeeService, IMapper mapper)
         {
 
-            _context = context;
+            _employeeService= employeeService;
             _mapper = mapper;
         }
 
         // POST: api/Employees
         [HttpPost]
-        public async Task<ActionResult<Employee>> PostEmployee(EmployeeDTO employeeDto)
+        public ActionResult<Employee> PostEmployee(EmployeeDTO employeeDto)
         {
             Employee employee = _mapper.Map<Employee>(employeeDto);
-            _context.Employees.Add(employee);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetEmployee", new { id = employee.EmployeeId }, employee);
+            Employee emp=_employeeService.AddEmployee(employee);
+            if (emp != null)
+            {
+                return Ok(emp);
+            }
+            return BadRequest();
+           
         }
 
-        private bool EmployeeExists(int id)
+        /*private bool EmployeeExists(int id)
         {
             return _context.Employees.Any(e => e.EmployeeId == id);
-        }
+        }*/
     }
 }

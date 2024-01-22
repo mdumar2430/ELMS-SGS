@@ -9,6 +9,7 @@ using ELMS_API.Data;
 using ELMS_API.Models;
 using AutoMapper;
 using ELMS_API.DTO;
+using ELMS_API.Interfaces;
 
 namespace ELMS_API.Controllers
 {
@@ -16,12 +17,12 @@ namespace ELMS_API.Controllers
     [ApiController]
     public class LeaveRequestsController : ControllerBase
     {
-        private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly ILeaveRequestService _leaveRequestService;
 
-        public LeaveRequestsController(AppDbContext context, IMapper mapper)
+        public LeaveRequestsController(ILeaveRequestService leaveRequestService, IMapper mapper)
         {
-            _context = context;
+            _leaveRequestService=leaveRequestService;
             _mapper = mapper;
         }
 
@@ -29,14 +30,17 @@ namespace ELMS_API.Controllers
         public async Task<ActionResult<LeaveRequest>> PostLeaveRequest(LeaveRequestDTO leaveRequestDto)
         {
             LeaveRequest leaveRequest = _mapper.Map<LeaveRequest>(leaveRequestDto);
-            _context.LeaveRequests.Add(leaveRequest);
-            await _context.SaveChangesAsync();
+            LeaveRequest result= _leaveRequestService.addLeaveRequest(leaveRequest);
+            if (result != null)
+            {
+                return Ok(result);
+            }
 
-            return CreatedAtAction("GetLeaveRequest", new { id = leaveRequest.RequestId }, leaveRequest);
+            return BadRequest("Leave days not available");
         }
-        private bool LeaveRequestExists(int id)
+        /*private bool LeaveRequestExists(int id)
         {
             return _context.LeaveRequests.Any(e => e.RequestId == id);
-        }
+        }*/
     }
 }

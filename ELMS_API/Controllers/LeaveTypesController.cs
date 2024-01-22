@@ -9,6 +9,7 @@ using ELMS_API.Data;
 using ELMS_API.Models;
 using AutoMapper;
 using ELMS_API.DTO;
+using ELMS_API.Interfaces;
 
 namespace ELMS_API.Controllers
 {
@@ -16,27 +17,27 @@ namespace ELMS_API.Controllers
     [ApiController]
     public class LeaveTypesController : ControllerBase
     {
-        private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly ILeaveTypeService _leaveTypeService;
 
-        public LeaveTypesController(AppDbContext context, IMapper mapper)
+        public LeaveTypesController(IMapper mapper,ILeaveTypeService leaveTypeService)
         {
-            _context = context;
             _mapper = mapper;
+            _leaveTypeService = leaveTypeService;
         }
 
         [HttpPost]
         public async Task<ActionResult<LeaveType>> PostLeaveType(LeaveTypeDTO leaveTypeDto)
         {
             LeaveType leaveType = _mapper.Map<LeaveType>(leaveTypeDto);
-            _context.LeaveTypes.Add(leaveType);
-            await _context.SaveChangesAsync();
+            //_.Add(leaveType);
+            //await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetLeaveType", new { id = leaveType.LeaveTypeId }, leaveType);
+            return Ok(true);
         }
         private bool LeaveTypeExists(int id)
         {
-            return _context.LeaveTypes.Any(e => e.LeaveTypeId == id);
+            return _leaveTypeService.leaveTypeExist(id);
         }
     }
 }
