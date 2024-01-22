@@ -1,5 +1,6 @@
 ﻿using ELMS_API.Data;
 using ELMS_API.Interfaces;
+using ELMS_API.Models;
 
 namespace ELMS_API.Services
 {
@@ -15,6 +16,14 @@ namespace ELMS_API.Services
             var rows = _appDbContext.LeaveBalances.Where(x => x.EmployeeId == empId && x.LeaveTypeId == leaveTypeId);
             var leaveBalance = rows.Select(x => x.Balance).Single();
             return leaveBalance;
+        }
+        public bool updateLeaveBalance(int empId, int leaveTypeId,int noOfDays)
+        {
+            var rows= _appDbContext.LeaveBalances.Where(x => x.EmployeeId == empId && x.LeaveTypeId == leaveTypeId).ToList();
+            LeaveBalance row = rows.First();
+            row.Balance = row.Balance - noOfDays;
+            _appDbContext.SaveChanges();
+            return true;
         }
     }
 }

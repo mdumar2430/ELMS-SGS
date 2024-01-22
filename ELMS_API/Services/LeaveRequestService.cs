@@ -1,6 +1,7 @@
 ﻿using ELMS_API.Data;
 using ELMS_API.Interfaces;
 using ELMS_API.Models;
+using System.Linq;
 
 namespace ELMS_API.Services
 {
@@ -24,5 +25,21 @@ namespace ELMS_API.Services
       }
       return null;
     }
+        public bool approveLeaveRequest(int leaveRequestID)
+        {
+            
+                LeaveRequest approvalLeaveRequest = _context.LeaveRequests.FirstOrDefault(x => x.RequestId == leaveRequestID);
+                if(approvalLeaveRequest != null)
+                {
+                    approvalLeaveRequest.Status = "Approved";
+                    approvalLeaveRequest.DateResolved = DateTime.Now;
+                    int noOfLeaveRequested = (int)(approvalLeaveRequest.EndDate - approvalLeaveRequest.StartDate).TotalDays;
+                    leaveBalance.updateLeaveBalance(approvalLeaveRequest.EmployeeId, approvalLeaveRequest.LeaveTypeId, noOfLeaveRequested);
+                    _context.SaveChangesAsync();
+                    return true;
+                }
+                return false;
+           
+        }
     }
 }

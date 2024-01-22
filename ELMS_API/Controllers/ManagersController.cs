@@ -27,6 +27,7 @@ namespace ELMS_API.Controllers
         }
 
         [HttpPost]
+        [Route("AddManager")]
         public async Task<ActionResult<Manager>> PostManager(ManagerDTO managerDto)
         {
             Manager manager = _mapper.Map<Manager>(managerDto);
@@ -43,11 +44,13 @@ namespace ELMS_API.Controllers
         }*/
 
         [HttpGet]
+        [Route("GetPendingLeaveRequest")]
         public ActionResult GetPendingLeaveRequest(int managerId)
         {
             var pendingLeaveRequest = _managerService.GetPendingLeaveRequestsForManager(managerId);
 
             return Ok(pendingLeaveRequest);
         }
+       
     }
 }
