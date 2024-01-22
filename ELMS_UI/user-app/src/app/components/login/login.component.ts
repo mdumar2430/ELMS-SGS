@@ -6,11 +6,15 @@ import { UserService } from "../../services/user.service";
 import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatButtonModule} from '@angular/material/button';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {FormControl, Validators, ReactiveFormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, MatCardModule, MatIconModule],
+  imports: [FormsModule, MatCardModule, MatIconModule,MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
   providers:[HttpClientModule]
@@ -18,11 +22,11 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 
 export class LoginComponent {
 
-    userEmail: string = "";
-    userPass: string = "";
-    btnClicked: boolean = false;
+    email = new FormControl('', [Validators.required, Validators.email]);
+    password = new FormControl('', [Validators.required, Validators.minLength(8)]);
+    hide = true;
 
-    constructor(
+    constructor( 
       private _router: Router
       ,private userService: UserService
       ,private _snackBar: MatSnackBar
@@ -33,7 +37,7 @@ export class LoginComponent {
     }
 
     login() {
-      var payload = { "Email": this.userEmail, "Password": this.userPass };
+      var payload = { "Email": this.email.value, "Password": this.password.value };
       this.userService.userLogin(payload)
       .subscribe(
       {
@@ -59,8 +63,19 @@ export class LoginComponent {
       }
       )
     }
+    getEmailErrorMessage() {
+      if (this.email.hasError('required')) {
+        return 'You must enter a value';
+      }
+  
+      return this.email.hasError('email') ? 'Not a valid email' : '';
+    }
 
-    logout() {
-        this.btnClicked = false;
+    getPasswordErrorMessage() {
+      if (this.password.hasError('required')) {
+        return 'You must enter a value';
+      }
+  
+      return this.password.hasError('minlength') ? 'Password must contain 8 characters.' : '';
     }
 }
