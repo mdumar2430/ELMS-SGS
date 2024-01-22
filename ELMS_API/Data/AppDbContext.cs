@@ -15,5 +15,10 @@ namespace ELMS_API.Data
         public DbSet<LeaveType> LeaveTypes { get; set; }
         public DbSet<TeamMember> TeamMembers { get; set; }
         public DbSet<LeaveRequest> LeaveRequests { get; set; }
+        public override int SaveChanges()
+        {
+            int result = base.SaveChanges();
+            return result;
+        }
     }
 }

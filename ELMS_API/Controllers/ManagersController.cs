@@ -9,6 +9,7 @@ using ELMS_API.Data;
 using ELMS_API.Models;
 using ELMS_API.DTO;
 using AutoMapper;
+using ELMS_API.Interfaces;
 
 namespace ELMS_API.Controllers
 {
@@ -16,27 +17,37 @@ namespace ELMS_API.Controllers
     [ApiController]
     public class ManagersController : ControllerBase
     {
-        private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IManagerService _managerService;
 
-        public ManagersController(AppDbContext context, IMapper mapper)
+        public ManagersController(IMapper mapper, IManagerService managerService)
         {
-            _context = context;
             _mapper = mapper;
+            _managerService = managerService;
         }
 
         [HttpPost]
         public async Task<ActionResult<Manager>> PostManager(ManagerDTO managerDto)
         {
             Manager manager = _mapper.Map<Manager>(managerDto);
-            _context.Managers.Add(manager);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetManager", new { id = manager.ManagerId }, manager);
+            bool isAdded = _managerService.AddManager(manager);
+            if (isAdded)
+            {
+                return Ok();
+            }
+            return BadRequest();
         }
-        private bool ManagerExists(int id)
+        /*private bool ManagerExists(int id)
         {
             return _context.Managers.Any(e => e.ManagerId == id);
+        }*/
+
+        [HttpGet]
+        public ActionResult GetPendingLeaveRequest(int managerId)
+        {
+            var pendingLeaveRequest = _managerService.GetPendingLeaveRequestsForManager(managerId);
+
+            return Ok(pendingLeaveRequest);
         }
     }
 }

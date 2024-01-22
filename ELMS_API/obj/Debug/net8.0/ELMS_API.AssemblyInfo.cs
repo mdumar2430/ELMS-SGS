@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ELMS_API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f8cc8a5200ec4868c350b23f373e50fe19de3ae6")]
 [assembly: System.Reflection.AssemblyProductAttribute("ELMS_API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ELMS_API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
