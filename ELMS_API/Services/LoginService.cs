@@ -49,12 +49,12 @@ namespace ELMS_API.Services
             string result = ValidateUser(emailid, password);
             if (result == "Valid user")
             {
-                //byte[] data = Convert.FromBase64String(password);
-                //string decodedPassword = Encoding.UTF8.GetString(data);
+                byte[] data = Convert.FromBase64String(password);
+                string decodedPassword = Encoding.UTF8.GetString(data);
                 var user = _context.Employees.FirstOrDefault(x => emailid.Equals(x.Email));
                 if (user != null)
                 {
-                    if (_passwordHasher.VerifyPassword(user.Password,password))
+                    if (_passwordHasher.VerifyPassword(user.Password,decodedPassword))
                     {
                         return user;
                     }
