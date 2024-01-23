@@ -38,19 +38,20 @@ namespace ELMS_API.Controllers
             }
             return BadRequest();
         }
-        /*private bool ManagerExists(int id)
-        {
-            return _context.Managers.Any(e => e.ManagerId == id);
-        }*/
-
         [HttpGet]
-        [Route("GetPendingLeaveRequest")]
-        public ActionResult GetPendingLeaveRequest(int managerId)
+        [Route("GetManagerIdByEmployeeId")]
+        public ActionResult GetManagerIdByEmployeeId(int empId)
         {
-            var pendingLeaveRequest = _managerService.GetPendingLeaveRequestsForManager(managerId);
-
-            return Ok(pendingLeaveRequest);
+            int managerID = _managerService.GetManagerIdByEmployeeId(empId);
+            if(managerID == 0)
+            {
+                return BadRequest();
+            }
+            return Ok(managerID);
         }
+        
+
+        
        
     }
 }

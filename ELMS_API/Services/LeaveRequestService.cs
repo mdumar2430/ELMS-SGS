@@ -41,5 +41,19 @@ namespace ELMS_API.Services
                 return false;
            
         }
+        public List<LeaveRequest> GetPendingLeaveRequestsForManager(int managerId)
+        {
+            var pendingLeaveRequests = _context.LeaveRequests
+                                    .Join(_context.TeamMembers,
+                                    lr => lr.EmployeeId,
+                                    tm => tm.EmployeeId,
+                                    (lr, tm) => new { LeaveRequest = lr, TeamMember = tm }
+                                    )
+                                    .Where(joinResult => joinResult.TeamMember.ManagerId == managerId && joinResult.LeaveRequest.Status == "Pending")
+                                    .Select(joinResult => joinResult.LeaveRequest)
+                                    .ToList();
+
+            return pendingLeaveRequests;
+        }
     }
 }

@@ -10,6 +10,7 @@ using ELMS_API.Models;
 using AutoMapper;
 using ELMS_API.DTO;
 using ELMS_API.Interfaces;
+using ELMS_API.Services;
 
 namespace ELMS_API.Controllers
 {
@@ -19,6 +20,7 @@ namespace ELMS_API.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ILeaveRequestService _leaveRequestService;
+
 
         public LeaveRequestsController(ILeaveRequestService leaveRequestService, IMapper mapper)
         {
@@ -49,6 +51,14 @@ namespace ELMS_API.Controllers
                 return Ok();
             }
             return BadRequest();
+        }
+        [HttpGet]
+        [Route("GetPendingLeaveRequest")]
+        public ActionResult GetPendingLeaveRequest(int managerId)
+        {
+            var pendingLeaveRequest = _leaveRequestService.GetPendingLeaveRequestsForManager(managerId);
+
+            return Ok(pendingLeaveRequest);
         }
     }
 }

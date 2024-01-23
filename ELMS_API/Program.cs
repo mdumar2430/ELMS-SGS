@@ -26,6 +26,7 @@ builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IPasswordHasher,PasswordHasher>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IManagerService, ManagerService>();
+builder.Services.AddScoped<ILeaveTypeService,LeaveTypeService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

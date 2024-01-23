@@ -5,6 +5,6 @@ namespace ELMS_API.Interfaces
     public interface IManagerService
     {
         public bool AddManager(Manager manager);
-        public List<LeaveRequest> GetPendingLeaveRequestsForManager(int managerId);
+        public int GetManagerIdByEmployeeId(int employeeId);
     }
 }
