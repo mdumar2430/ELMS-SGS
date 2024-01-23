@@ -43,6 +43,8 @@ export class LoginComponent {
       {
           next: (res)=>{
             if(res){
+              sessionStorage.setItem('isLoggedIn', 'true');
+              sessionStorage.setItem('role', res.role);
               this.userService.isLoggedIn = true
               this._snackBar.open('Login Successfull', 'Ok', {
                 duration: 2000

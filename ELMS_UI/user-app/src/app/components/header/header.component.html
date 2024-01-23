@@ -4,12 +4,12 @@
         <img class="img-fluid" src="../../../assets/sgs-logo.png" width="80">
       </a>
     </div>
-    <div *ngIf="userService.isLoggedIn" style="color: aliceblue;">
+    <div *ngIf="userService.isUserLoggedIn()" style="color: aliceblue;">
         <button mat-icon-button color="" [matMenuTriggerFor]="beforeMenu">
           <mat-icon>person</mat-icon>
         </button>
         <mat-menu #beforeMenu="matMenu" xPosition="before">
-          <button mat-menu-item [routerLink]="['']" >Logout</button>
+          <button mat-menu-item (click)="logout()" >Logout</button>
         </mat-menu>
     </div>
 </nav>

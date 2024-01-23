@@ -11,8 +11,42 @@ import {MatListModule} from '@angular/material/list';
   styleUrl: './side-nav-bar.component.css'
 })
 export class SideNavBarComponent {
-  
+
+  menuItems_user = [
+  {
+    name : "Request Leave",
+    routeTo : "/leave-request"
+  },
+  {
+    name: "Leave Status",
+    routeTo : "/"
+  }
+]
+
+  menuItems_manager = [
+    {
+      name : "Approve/Reject Leave Requests",
+      routeTo : "/"
+    },
+    {
+      name : "Request Leave",
+      routeTo : "/leave-request"
+    },
+    {
+      name: "Leave Status",
+      routeTo : "/"
+      
+    }
+  ]
+  items = this.getMenuItems();
+
   constructor(public userService:UserService){
 
+  }
+
+  getMenuItems(){
+    if(sessionStorage.getItem('role')=='Manager')
+      return this.menuItems_manager;
+    return this.menuItems_user;
   }
 }
