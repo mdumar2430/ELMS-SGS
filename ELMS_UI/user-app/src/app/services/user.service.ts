@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../user';
 import { Observable } from 'rxjs';
-
+import {Buffer} from 'buffer';
 @Injectable({
   providedIn: 'root'
 })
@@ -16,6 +16,8 @@ export class UserService {
   }
 
   userLogin(body:any):Observable<boolean>{
-    return this.http.post<boolean>('https://localhost:44334/api/Login', body)
+    const buffer = Buffer.from(body.Password, 'utf-8');
+    var user={"Email":body.Email,"Password":buffer.toString('base64')}
+    return this.http.post<boolean>('https://localhost:7034/api/Login', user)
   }
 }

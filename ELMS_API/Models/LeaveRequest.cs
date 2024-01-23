@@ -11,10 +11,10 @@ namespace ELMS_API.Models
         public int LeaveTypeId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public string Status { get; set; }
+        public string Status { get; set; } = "PENDING";
         public string Comments { get; set; }
         public DateTime DateSubmitted { get; set; }
-        public DateTime? DateResolved { get; set; }
+        public DateTime? DateResolved { get; set; } = null;
 
         // Navigation properties for Employee (Many-to-One) and LeaveType (Many-to-One)
         [ForeignKey("EmployeeId")]
