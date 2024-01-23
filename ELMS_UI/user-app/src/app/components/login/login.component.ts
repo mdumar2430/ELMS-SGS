@@ -47,7 +47,7 @@ export class LoginComponent {
               this._snackBar.open('Login Successfull', 'Ok', {
                 duration: 2000
               });
-              this._router.navigate(['/users'])
+              this._router.navigate(['/leave-request'])
             }
             else{
               this._snackBar.open('Login Failed - Invalid Email or Password', 'Ok', {
