@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ELMS_API.Data
 {
-    public class AppDbContext: DbContext , IAppDbContext
+    public class AppDbContext: DbContext,IAppDbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options):base(options)
         {
@@ -15,10 +15,5 @@ namespace ELMS_API.Data
         public DbSet<LeaveType> LeaveTypes { get; set; }
         public DbSet<TeamMember> TeamMembers { get; set; }
         public DbSet<LeaveRequest> LeaveRequests { get; set; }
-        public override int SaveChanges()
-        {
-            int result = base.SaveChanges();
-            return result;
-        }
     }
 }

@@ -9,7 +9,6 @@ using ELMS_API.Data;
 using ELMS_API.Models;
 using AutoMapper;
 using ELMS_API.DTO;
-using ELMS_API.Interfaces;
 
 namespace ELMS_API.Controllers
 {
@@ -17,38 +16,98 @@ namespace ELMS_API.Controllers
     [ApiController]
     public class LeaveRequestsController : ControllerBase
     {
+        private readonly AppDbContext _context;
         private readonly IMapper _mapper;
-        private readonly ILeaveRequestService _leaveRequestService;
 
-        public LeaveRequestsController(ILeaveRequestService leaveRequestService, IMapper mapper)
+        public LeaveRequestsController(AppDbContext context, IMapper mapper)
         {
-            _leaveRequestService=leaveRequestService;
+            _context = context;
             _mapper = mapper;
         }
 
+        // GET: api/LeaveRequests
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<LeaveRequest>>> GetLeaveRequests()
+        {
+            return await _context.LeaveRequests.ToListAsync();
+        }
+
+        // GET: api/LeaveRequests/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<LeaveRequest>> GetLeaveRequest(int id)
+        {
+            var leaveRequest = await _context.LeaveRequests.FindAsync(id);
+
+            if (leaveRequest == null)
+            {
+                return NotFound();
+            }
+
+            return leaveRequest;
+        }
+
+        // PUT: api/LeaveRequests/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutLeaveRequest(int id, LeaveRequest leaveRequest)
+        {
+            if (id != leaveRequest.RequestId)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(leaveRequest).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!LeaveRequestExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        // POST: api/LeaveRequests
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [Route("AddLeaveRequest")]
         public async Task<ActionResult<LeaveRequest>> PostLeaveRequest(LeaveRequestDTO leaveRequestDto)
         {
             LeaveRequest leaveRequest = _mapper.Map<LeaveRequest>(leaveRequestDto);
-            LeaveRequest result= _leaveRequestService.addLeaveRequest(leaveRequest);
-            if (result != null)
+            _context.LeaveRequests.Add(leaveRequest);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetLeaveRequest", new { id = leaveRequest.RequestId }, leaveRequest);
+        }
+
+        // DELETE: api/LeaveRequests/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteLeaveRequest(int id)
+        {
+            var leaveRequest = await _context.LeaveRequests.FindAsync(id);
+            if (leaveRequest == null)
             {
-                return Ok(result);
+                return NotFound();
             }
 
-            return BadRequest("Leave days not available");
+            _context.LeaveRequests.Remove(leaveRequest);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
-        [HttpPut]
-        [Route("ApproveLeaveRequest")]
-        public ActionResult ApprovePendingLeaveRequest(int leaveRequestId)
+
+        private bool LeaveRequestExists(int id)
         {
-            bool isApproved = _leaveRequestService.approveLeaveRequest(leaveRequestId);
-            if(isApproved)
-            {
-                return Ok();
-            }
-            return BadRequest();
+            return _context.LeaveRequests.Any(e => e.RequestId == id);
         }
     }
 }

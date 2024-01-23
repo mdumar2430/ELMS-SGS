@@ -1,43 +1,45 @@
 import { Component } from "@angular/core";
 import { HttpClientModule } from "@angular/common/http";
+import * as forge from 'node-forge';
 import { Router } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 import { UserService } from "../../services/user.service";
 import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {MatButtonModule} from '@angular/material/button';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {FormControl, Validators, ReactiveFormsModule} from '@angular/forms';
-
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, MatCardModule, MatIconModule,MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule],
+  imports: [FormsModule, MatCardModule, MatIconModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
   providers:[HttpClientModule]
 })
-
 export class LoginComponent {
+    userEmail: string = "";
+    userPass: string = "";
+    btnClicked: boolean = false;
+    
 
-    email = new FormControl('', [Validators.required, Validators.email]);
-    password = new FormControl('', [Validators.required, Validators.minLength(8)]);
-    hide = true;
-
-    constructor( 
-      private _router: Router
-      ,private userService: UserService
-      ,private _snackBar: MatSnackBar
-      ) { }
+    publicKey: string = `-----BEGIN PUBLIC KEY-----
+    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAskgPKBcNpz71mi4NSYa5
+    mazJrO0WZim7T2yy7qPxk2NqQE7OmWWakLJcaeUYnI0kO3yC57vck66RPCjKxWuW
+    SGZ7dHXe0bWb5IXjcT4mNdnUIalR+lV8czsoH/wDUvkQdG1SJ+IxzW64WvoaCRZ+
+    /4wBF2cSUh9oLwGEXiodUJ9oJXFZVPKGCEjPcBI0vC2ADBRmVQ1sKsZg8zbHN+gu
+    U9rPLFzN4YNrCnEsSezVw/W1FKVS8J/Xx4HSSg7AyVwniz8eHi0e3a8VzFg+H09I
+    5wK+w39sjDYfAdnJUkr6PjtSbN4/Sg/NMkKB2Ngn8oj7LCfe/7RNqIdiS+dQuSFg
+    eQIDAQAB
+    -----END PUBLIC KEY-----`;
+    constructor(private _router: Router, private userService: UserService, private _snackBar: MatSnackBar) { }
 
     ngOnInit(){
       this.userService.isLoggedIn = false
     }
 
     login() {
-      var payload = { "Email": this.email.value, "Password": this.password.value };
+      var rsa = forge.pki.publicKeyFromPem(this.publicKey);
+      var encryptedPassword = window.btoa(rsa.encrypt(this.userPass));
+      var payload = { "Email": this.userEmail, "Password": encryptedPassword };
       this.userService.userLogin(payload)
       .subscribe(
       {
@@ -47,7 +49,7 @@ export class LoginComponent {
               this._snackBar.open('Login Successfull', 'Ok', {
                 duration: 2000
               });
-              this._router.navigate(['/leave-request'])
+              this._router.navigate(['/users'])
             }
             else{
               this._snackBar.open('Login Failed - Invalid Email or Password', 'Ok', {
@@ -63,19 +65,8 @@ export class LoginComponent {
       }
       )
     }
-    getEmailErrorMessage() {
-      if (this.email.hasError('required')) {
-        return 'You must enter a value';
-      }
-  
-      return this.email.hasError('email') ? 'Not a valid email' : '';
-    }
 
-    getPasswordErrorMessage() {
-      if (this.password.hasError('required')) {
-        return 'You must enter a value';
-      }
-  
-      return this.password.hasError('minlength') ? 'Password must contain 8 characters.' : '';
+    logout() {
+        this.btnClicked = false;
     }
 }
