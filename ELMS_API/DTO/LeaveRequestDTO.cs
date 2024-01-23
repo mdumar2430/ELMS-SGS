@@ -11,5 +11,6 @@
         public string Comments { get; set; }
         public DateTime DateSubmitted { get; set; }
         public DateTime? DateResolved { get; set; }
+
     }
 }

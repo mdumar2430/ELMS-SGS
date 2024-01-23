@@ -7581,11 +7581,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\ELMS-SGS\\ELMS_API\\ELMS_API.csproj",
+      "projectUniqueName": "C:\\Users\\sgsuser\\Documents\\GitHub\\ELMS-SGS\\Kiruthika_Project\\ELMS_API\\ELMS_API.csproj",
       "projectName": "ELMS_API",
-      "projectPath": "D:\\ELMS-SGS\\ELMS_API\\ELMS_API.csproj",
+      "projectPath": "C:\\Users\\sgsuser\\Documents\\GitHub\\ELMS-SGS\\Kiruthika_Project\\ELMS_API\\ELMS_API.csproj",
       "packagesPath": "C:\\Users\\sgsuser\\.nuget\\packages\\",
-      "outputPath": "D:\\ELMS-SGS\\ELMS_API\\obj\\",
+      "outputPath": "C:\\Users\\sgsuser\\Documents\\GitHub\\ELMS-SGS\\Kiruthika_Project\\ELMS_API\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\sgsuser\\AppData\\Roaming\\NuGet\\NuGet.Config",

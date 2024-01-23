@@ -1,4 +1,5 @@
-﻿using ELMS_API.Models;
+﻿using ELMS_API.DTO;
+using ELMS_API.Models;
 
 namespace ELMS_API.Interfaces
 {
@@ -6,6 +7,6 @@ namespace ELMS_API.Interfaces
     {
         public LeaveRequest addLeaveRequest(LeaveRequest request);
         public bool approveLeaveRequest(int leaveRequestId);
-        public List<LeaveRequest> GetPendingLeaveRequestsForManager(int managerId);
+        public List<PendingLeaveRequestDTO> GetPendingLeaveRequestsForManager(int managerId);
     }
 }

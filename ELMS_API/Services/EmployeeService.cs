@@ -26,5 +26,14 @@ namespace ELMS_API.Services
             }
             return null;
         }
+        public string GetEmployeeNameByEmployeeId(int empID)
+        {
+            var row = _appDbContext.Employees.FirstOrDefault(x => x.EmployeeId == empID);
+            if (row != null)
+            {
+                return row.FirstName + " " + row.LastName;
+            }
+            return null;
+        }
     }
 }

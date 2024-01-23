@@ -23,7 +23,7 @@ namespace ELMS_API.Controllers
         public EmployeesController(IEmployeeService employeeService, IMapper mapper)
         {
 
-            _employeeService= employeeService;
+            _employeeService = employeeService;
             _mapper = mapper;
         }
 
@@ -33,13 +33,23 @@ namespace ELMS_API.Controllers
         public ActionResult<Employee> PostEmployee(EmployeeDTO employeeDto)
         {
             Employee employee = _mapper.Map<Employee>(employeeDto);
-            Employee emp=_employeeService.AddEmployee(employee);
+            Employee emp = _employeeService.AddEmployee(employee);
             if (emp != null)
             {
                 return Ok(emp);
             }
             return BadRequest();
-           
+
+        }
+        [HttpGet]
+        public ActionResult GetEmployeeNameByEmployeeId(int employeeId)
+        {
+            string employeeName = _employeeService.GetEmployeeNameByEmployeeId(employeeId);
+            if(employeeName != null)
+            {
+                return Ok(employeeName);
+            }
+            return BadRequest();
         }
 
         

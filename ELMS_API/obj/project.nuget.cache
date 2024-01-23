@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "WZn3pNc59+MNobpsnfQLG1ZcgPZRWsmN9QJjf7KT3Q7Y304LKBjhCORVFfxMFxfAt9SwanZLb4Zu7XII+xt7Zg==",
+  "dgSpecHash": "q6sBAL4DwsFx1mib4BgE1ww6iFJwpN2vURTPw4g/j1STY7HGg/nAyFSi/8cCFFypPkSOATHmgsmGej4O//AxfA==",
   "success": true,
-  "projectFilePath": "D:\\ELMS-SGS\\ELMS_API\\ELMS_API.csproj",
+  "projectFilePath": "C:\\Users\\sgsuser\\Documents\\GitHub\\ELMS-SGS\\Kiruthika_Project\\ELMS_API\\ELMS_API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sgsuser\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\sgsuser\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",

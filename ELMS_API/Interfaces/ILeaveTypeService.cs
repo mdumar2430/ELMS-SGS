@@ -1,4 +1,5 @@
-﻿using ELMS_API.Models;
+﻿using ELMS_API.DTO;
+using ELMS_API.Models;
 
 namespace ELMS_API.Interfaces
 {
@@ -6,6 +7,6 @@ namespace ELMS_API.Interfaces
     {
         public bool AddLeaveType(LeaveType leaveType);
         public bool leaveTypeExist(int id);
-        public List<String> GetLeaveTypes();
+        public List<LeaveTypeDTO> GetLeaveTypes();
     }
 }
