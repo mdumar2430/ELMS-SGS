@@ -20,5 +20,12 @@ export class UserListComponent {
   }
 
   ngOnInit(){
+    this.userService.getUsers()
+    .subscribe({
+      next : (response) => {
+        this.users = response
+      }
+    }
+    )
   }
 }

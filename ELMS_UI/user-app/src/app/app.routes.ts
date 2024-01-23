@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { UserListComponent } from './components/user-list/user-list.component';
-import { LeaveRequestComponent } from './leave-request/leave-request.component';
 
 export const routes: Routes = [
     {
@@ -9,7 +8,7 @@ export const routes: Routes = [
         component:LoginComponent
     },
     {
-        path:'leave-request',
-        component:LeaveRequestComponent,
+        path:'users',
+        component:UserListComponent,
     }
 ];

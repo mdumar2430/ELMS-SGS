@@ -10,10 +10,7 @@ namespace ELMS_API.Data
         DbSet<LeaveBalance> LeaveBalances { get; set; }
         DbSet<LeaveType> LeaveTypes { get; set; }
         DbSet<TeamMember> TeamMembers { get; set; }
-        DbSet<LeaveRequest> LeaveRequests { get; set; }
-
-        public int SaveChanges();
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+        DbSet<LeaveRequest> LeaveRequests { get; set; } 
 
     }
 }

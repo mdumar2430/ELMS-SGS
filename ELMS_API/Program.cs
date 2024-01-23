@@ -2,8 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using ELMS_API.Controllers;
-using ELMS_API.Services;
-using ELMS_API.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,12 +18,6 @@ builder.Services.AddDbContext<AppDbContext>(Options =>
 });
 
 builder.Services.AddScoped<IAppDbContext, AppDbContext>();
-builder.Services.AddScoped<ILeaveRequestService, LeaveRequestService>();
-builder.Services.AddScoped<ILeaveBalanceService, LeaveBalanceService>();
-builder.Services.AddScoped<ILoginService, LoginService>();
-builder.Services.AddScoped<IPasswordHasher,PasswordHasher>();
-builder.Services.AddScoped<IEmployeeService, EmployeeService>();
-builder.Services.AddScoped<IManagerService, ManagerService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -42,8 +34,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
-app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 app.MapControllers();
 
