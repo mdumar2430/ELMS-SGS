@@ -35,6 +35,13 @@ namespace ELMS_API.Controllers
 
             return Ok(true);
         }
+        [HttpGet]
+        [Route("GetLeaveTypeName")]
+        public ActionResult GetLeaveType()
+        {
+            var leaveTypeList = _leaveTypeService.GetLeaveTypes();
+            return Ok(leaveTypeList);
+        }
         private bool LeaveTypeExists(int id)
         {
             return _leaveTypeService.leaveTypeExist(id);

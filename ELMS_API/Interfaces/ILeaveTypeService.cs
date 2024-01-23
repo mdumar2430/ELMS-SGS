@@ -6,5 +6,6 @@ namespace ELMS_API.Interfaces
     {
         public bool AddLeaveType(LeaveType leaveType);
         public bool leaveTypeExist(int id);
+        public List<String> GetLeaveTypes();
     }
 }

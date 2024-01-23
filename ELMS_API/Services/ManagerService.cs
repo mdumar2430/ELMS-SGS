@@ -18,20 +18,13 @@ namespace ELMS_API.Services
             _appDbContext.Managers.Add(manager);
             return true;
         }
-        public List<LeaveRequest> GetPendingLeaveRequestsForManager(int managerId)
+        public int GetManagerIdByEmployeeId(int employeeId)
         {
-            var pendingLeaveRequests = _appDbContext.LeaveRequests
-    .                                  Join(
-                                       _appDbContext.TeamMembers,
-            lr => lr.EmployeeId,
-        tm => tm.EmployeeId,
-        (lr, tm) => new { LeaveRequest = lr, TeamMember = tm }
-    )
-    .Where(joinResult => joinResult.TeamMember.ManagerId == managerId && joinResult.LeaveRequest.Status == "Pending")
-    .Select(joinResult => joinResult.LeaveRequest)
-    .ToList();
-
-            return pendingLeaveRequests;
+            var row = _appDbContext.Managers.FirstOrDefault(x=>x.EmployeeId == employeeId);
+            if (row != null) {
+                return row.ManagerId;
+            }
+            return 0;
         }
     }
 }
