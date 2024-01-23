@@ -9,6 +9,9 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormControl, Validators, ReactiveFormsModule, FormsModule, FormGroup} from '@angular/forms';
 import {MatSelectModule} from '@angular/material/select';
+import { LeaveService } from '../../services/leave.service';
+import { LeaveType } from '../../models/leave-type.model';
+import { DatePipe } from '@angular/common';
 
 
 interface Animal {
@@ -23,30 +26,51 @@ interface Animal {
      MatInputModule, MatButtonModule, ReactiveFormsModule, MatSelectModule,MatDatepickerModule, MatNativeDateModule ],
   templateUrl: './leave-request.component.html',
   styleUrl: './leave-request.component.css',
-  providers: [NativeDateAdapter],
+  providers: [NativeDateAdapter,DatePipe],
 })
 export class LeaveRequestComponent {
-  leaveTypeControl = new FormControl<Animal | null>(null, Validators.required);
+  leaveTypeControl = new FormControl<LeaveType | null>(null, Validators.required);
   reason = new FormControl(null, Validators.required);
-  leaveTypes : Animal[] = this.getLeaveTypes();
-  animals: Animal[] = [
-    {name: 'Dog', sound: 'Woof!'},
-    {name: 'Cat', sound: 'Meow!'},
-    {name: 'Cow', sound: 'Moo!'},
-    {name: 'Fox', sound: 'Wa-pa-pa-pa-pa-pa-pow!'},
-  ];
+  leaveTypes:LeaveType[] = []
   range = new FormGroup({
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),
   });
 
+  constructor(private leaveService:LeaveService,private datePipe:DatePipe){
+
+  }
+
+  ngOnInit(){
+    this.getLeaveTypes()
+  }
+
   getLeaveTypes(){
-    return[
-      {name: 'Dog', sound: 'Woof!'},
-      {name: 'Cat', sound: 'Meow!'},
-      {name: 'Cow', sound: 'Moo!'},
-      {name: 'Fox', sound: 'Wa-pa-pa-pa-pa-pa-pow!'},
-    ];
+    this.leaveService.getLeaveTypes()
+    .subscribe(
+      {
+        next:(res)=>{
+          this.leaveTypes = res;
+
+        }
+      }
+    )
+  }
+
+  sendRequest(){
+    let leaveTypeId = this.leaveTypeControl.value?.leaveTypeId
+    let start = this.range.controls.start.value;
+    const formatStartDate:string|null=this.datePipe.transform(start,'yyyy-MM-dd');
+    console.log(formatStartDate)
+    let end = this.range.controls.end.value;
+    const formatEndDate:string|null=this.datePipe.transform(end,'yyyy-MM-dd');
+    let reason = this.reason.value
+    // let 
+    console.log('leaveTypeId'+leaveTypeId);
+    console.log('start' + start);
+    console.log('end' + end);
+    console.log('reason' + reason);
+    
   }
   
 }
