@@ -19,7 +19,6 @@ namespace ELMS_API.Controllers
         [HttpPost]
         public ActionResult Login(UserLogin user)
         {
-
             Employee employee = _loginService.Login(user.Email, user.Password);
 
             if (employee != null)
@@ -27,8 +26,6 @@ namespace ELMS_API.Controllers
                 return Ok(employee);
             }
             return BadRequest(false);
-
-
         }
     }
 }
