@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { BASE_API_URL } from '../constants/app-constants';
 import { User } from '../models/user.model';
 import { LeaveType } from '../models/leave-type.model';
+import { LeaveRequest } from '../models/leave-request.model';
+import { PendingLeaveRequest } from '../models/pending-leave-request';
 @Injectable({
   providedIn: 'root'
 })
@@ -13,5 +15,13 @@ export class LeaveService {
 
   getLeaveTypes() : Observable<LeaveType[]>{
     return this.http.get<LeaveType[]>(BASE_API_URL+'api/LeaveTypes/GetLeaveTypeName');
+  }
+
+  postLeaveRequest(payLoad:LeaveRequest) : Observable<boolean>{
+    return this.http.post<boolean>(BASE_API_URL+'api/LeaveRequests/AddLeaveRequest', payLoad)
+  }
+
+  getPendingLeaveRequest(payload:number): Observable<PendingLeaveRequest[]>{
+    return this.http.post<PendingLeaveRequest[]>(BASE_API_URL+'api/LeaveRequests/GetPendingLeaveRequest', payload)
   }
 }

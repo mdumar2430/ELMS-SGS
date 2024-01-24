@@ -26,7 +26,7 @@ export class SideNavBarComponent {
   menuItems_manager = [
     {
       name : "Approve/Reject Leave Requests",
-      routeTo : "/"
+      routeTo : "/pendingLeaveRequests"
     },
     {
       name : "Request Leave",
