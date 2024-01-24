@@ -2,6 +2,7 @@
 using ELMS_API.DTO;
 using ELMS_API.Interfaces;
 using ELMS_API.Models;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 
 namespace ELMS_API.Services
@@ -18,10 +19,10 @@ namespace ELMS_API.Services
     public LeaveRequest addLeaveRequest(LeaveRequest request)
     {
       int noOfLeaveAvailable = leaveBalance.getLeaveBalance(request.EmployeeId, request.LeaveTypeId);
-      int noOfLeaveRequested = (int)(request.EndDate - request.StartDate).TotalDays;
+      int noOfLeaveRequested = (int)(request.EndDate - request.StartDate).TotalDays+1;
       if(noOfLeaveAvailable >= noOfLeaveRequested) {
                 request.Status = "PENDING";
-        _context.LeaveRequests.Add(request);
+                _context.LeaveRequests.Add(request);
         _context.SaveChangesAsync();
         return request;
       }

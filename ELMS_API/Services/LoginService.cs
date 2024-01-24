@@ -1,6 +1,7 @@
 ﻿using ELMS_API.Data;
 using ELMS_API.Interfaces;
 using ELMS_API.Models;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Text;
 
 namespace ELMS_API.Services
@@ -49,19 +50,21 @@ namespace ELMS_API.Services
             string result = ValidateUser(emailid, password);
             if (result == "Valid user")
             {
-                byte[] data = Convert.FromBase64String(password);
-                string decodedPassword = Encoding.UTF8.GetString(data);
+                //byte[] data = Convert.FromBase64String(password);
+                //string decodedPassword = Encoding.UTF8.GetString(data);
                 var user = _context.Employees.FirstOrDefault(x => emailid.Equals(x.Email));
                 if (user != null)
                 {
-                    if (_passwordHasher.VerifyPassword(user.Password,decodedPassword))
+                    if (_passwordHasher.VerifyPassword(user.Password,password))
                     {
                         return user;
                     }
+                    throw new Exception("Password Error");
 
                 }
+                return null;
             }
-            return null;
+            throw new Exception(result);
         }
     }
 }
