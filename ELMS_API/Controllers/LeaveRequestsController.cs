@@ -52,8 +52,26 @@ namespace ELMS_API.Controllers
         [Route("ApproveLeaveRequest")]
         public ActionResult ApprovePendingLeaveRequest(int leaveRequestId)
         {
-            bool isApproved = _leaveRequestService.approveLeaveRequest(leaveRequestId);
-            if(isApproved)
+            try
+            {
+                bool isApproved = _leaveRequestService.approveLeaveRequest(leaveRequestId);
+                if (isApproved)
+                {
+                    return Ok(isApproved);
+                }
+                return StatusCode(404, null);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPut]
+        [Route("DenyLeaveRequest")]
+        public ActionResult DenyPendingLeaveRequest(int leaveRequestId)
+        {
+            bool isApproved = _leaveRequestService.denyLeaveRequest(leaveRequestId);
+            if (isApproved)
             {
                 return Ok();
             }
@@ -68,5 +86,6 @@ namespace ELMS_API.Controllers
 
             return Ok(pendingLeaveRequest);
         }
+        
     }
 }
