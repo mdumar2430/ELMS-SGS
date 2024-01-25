@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {Buffer} from 'buffer';
 import { User } from '../models/user.model';
+import { BASE_API_URL } from '../constants/app-constants';
 @Injectable({
   providedIn: 'root'
 })
@@ -23,5 +24,9 @@ export class UserService {
 
   isUserLoggedIn(){
     return sessionStorage.getItem('isLoggedIn');
+  }
+
+  getManagerId(payload:number):Observable<number>{
+    return this.http.post<number>(BASE_API_URL+'api/Managers/GetManagerIdByEmployeeId', payload)
   }
 }

@@ -12,6 +12,7 @@ import {MatSelectModule} from '@angular/material/select';
 import { LeaveService } from '../../services/leave.service';
 import { LeaveType } from '../../models/leave-type.model';
 import { DatePipe } from '@angular/common';
+import { LeaveRequest } from '../../models/leave-request.model';
 
 
 interface Animal {
@@ -30,14 +31,18 @@ interface Animal {
 })
 export class LeaveRequestComponent {
   leaveTypeControl = new FormControl<LeaveType | null>(null, Validators.required);
-  reason = new FormControl(null, Validators.required);
+  reason = new FormControl('', Validators.required);
   leaveTypes:LeaveType[] = []
   range = new FormGroup({
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),
   });
 
-  constructor(private leaveService:LeaveService,private datePipe:DatePipe){
+  constructor(
+    private leaveService:LeaveService
+    ,private datePipe:DatePipe
+    ,private _snackBar: MatSnackBar
+    ){
 
   }
 
@@ -51,26 +56,30 @@ export class LeaveRequestComponent {
       {
         next:(res)=>{
           this.leaveTypes = res;
-
         }
       }
     )
   }
 
   sendRequest(){
-    let leaveTypeId = this.leaveTypeControl.value?.leaveTypeId
-    let start = this.range.controls.start.value;
-    const formatStartDate:string|null=this.datePipe.transform(start,'yyyy-MM-dd');
-    console.log(formatStartDate)
-    let end = this.range.controls.end.value;
-    const formatEndDate:string|null=this.datePipe.transform(end,'yyyy-MM-dd');
-    let reason = this.reason.value
-    // let 
-    console.log('leaveTypeId'+leaveTypeId);
-    console.log('start' + start);
-    console.log('end' + end);
-    console.log('reason' + reason);
-    
+    var payLoad : LeaveRequest = new LeaveRequest()
+    payLoad.EmployeeId = Number(sessionStorage.getItem('userId'))
+    payLoad.LeaveTypeId = this.leaveTypeControl.value?.leaveTypeId
+    payLoad.StartDate = this.range.controls.start.value?.toISOString();
+    payLoad.EndDate = this.range.controls.end.value?.toISOString();
+    payLoad.DateSubmitted = new Date(Date.now()).toISOString()
+    payLoad.Comments = this.reason.value
+    this.leaveService.postLeaveRequest(payLoad)
+    .subscribe({
+      next : (res) => {
+        this._snackBar.open('Form Submitted Successfully', 'Ok', {
+          duration:2000
+        });
+        this.leaveTypeControl.reset()
+        this.reason.reset()
+        this.range.reset()
+      }
+    })    
   }
   
 }
