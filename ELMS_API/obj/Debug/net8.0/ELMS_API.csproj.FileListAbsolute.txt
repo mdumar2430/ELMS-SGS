@@ -1070,3 +1070,11 @@ D:\ELMS-SGS\ELMS_API\obj\Debug\net8.0\refint\ELMS_API.dll
 D:\ELMS-SGS\ELMS_API\obj\Debug\net8.0\ELMS_API.pdb
 D:\ELMS-SGS\ELMS_API\obj\Debug\net8.0\ELMS_API.genruntimeconfig.cache
 D:\ELMS-SGS\ELMS_API\obj\Debug\net8.0\ref\ELMS_API.dll
+C:\Users\sgsuser\Documents\GitHub\ELMS-SGS\Kiruthika_Project\ELMS_API\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\sgsuser\Documents\GitHub\ELMS-SGS\Kiruthika_Project\ELMS_API\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\sgsuser\Documents\GitHub\ELMS-SGS\Kiruthika_Project\ELMS_API\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\sgsuser\Documents\GitHub\ELMS-SGS\Kiruthika_Project\ELMS_API\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\sgsuser\Documents\GitHub\ELMS-SGS\Kiruthika_Project\ELMS_API\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\sgsuser\Documents\GitHub\ELMS-SGS\Kiruthika_Project\ELMS_API\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\sgsuser\Documents\GitHub\ELMS-SGS\Kiruthika_Project\ELMS_API\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\sgsuser\Documents\GitHub\ELMS-SGS\Kiruthika_Project\ELMS_API\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
