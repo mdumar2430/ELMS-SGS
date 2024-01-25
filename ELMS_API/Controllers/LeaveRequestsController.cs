@@ -11,6 +11,7 @@ using AutoMapper;
 using ELMS_API.DTO;
 using ELMS_API.Interfaces;
 using ELMS_API.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ELMS_API.Controllers
 {
@@ -32,14 +33,20 @@ namespace ELMS_API.Controllers
         [Route("AddLeaveRequest")]
         public async Task<ActionResult<LeaveRequest>> PostLeaveRequest(LeaveRequestDTO leaveRequestDto)
         {
-            LeaveRequest leaveRequest = _mapper.Map<LeaveRequest>(leaveRequestDto);
-            LeaveRequest result= _leaveRequestService.addLeaveRequest(leaveRequest);
-            if (result != null)
+            try
             {
-                return Ok(result);
+                LeaveRequest leaveRequest = _mapper.Map<LeaveRequest>(leaveRequestDto);
+                LeaveRequest result = _leaveRequestService.addLeaveRequest(leaveRequest);
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+                return StatusCode(500, "No of leave days not available");
             }
-
-            return BadRequest("Leave days not available");
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         [HttpPut]
         [Route("ApproveLeaveRequest")]
@@ -52,7 +59,8 @@ namespace ELMS_API.Controllers
             }
             return BadRequest();
         }
-        [HttpGet]
+        [HttpPost]
+        [Authorize]
         [Route("GetPendingLeaveRequest")]
         public ActionResult GetPendingLeaveRequest(int managerId)
         {

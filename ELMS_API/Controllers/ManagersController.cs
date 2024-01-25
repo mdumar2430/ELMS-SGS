@@ -10,6 +10,7 @@ using ELMS_API.Models;
 using ELMS_API.DTO;
 using AutoMapper;
 using ELMS_API.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ELMS_API.Controllers
 {
@@ -27,6 +28,7 @@ namespace ELMS_API.Controllers
         }
 
         [HttpPost]
+        
         [Route("AddManager")]
         public async Task<ActionResult<Manager>> PostManager(ManagerDTO managerDto)
         {
@@ -38,9 +40,9 @@ namespace ELMS_API.Controllers
             }
             return BadRequest();
         }
-        [HttpGet]
+        [HttpPost]
         [Route("GetManagerIdByEmployeeId")]
-        public ActionResult GetManagerIdByEmployeeId(int empId)
+        public ActionResult GetManagerIdByEmployeeId([FromBody]int empId)
         {
             int managerID = _managerService.GetManagerIdByEmployeeId(empId);
             if(managerID == 0)

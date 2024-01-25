@@ -41,16 +41,6 @@ namespace ELMS_API.Controllers
             return BadRequest();
 
         }
-        [HttpGet]
-        public ActionResult GetEmployeeNameByEmployeeId(int employeeId)
-        {
-            string employeeName = _employeeService.GetEmployeeNameByEmployeeId(employeeId);
-            if(employeeName != null)
-            {
-                return Ok(employeeName);
-            }
-            return BadRequest();
-        }
 
         
     }
