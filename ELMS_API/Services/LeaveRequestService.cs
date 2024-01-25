@@ -30,19 +30,36 @@ namespace ELMS_API.Services
     }
         public bool approveLeaveRequest(int leaveRequestID)
         {
-            
+                int noOfDays;
                 LeaveRequest approvalLeaveRequest = _context.LeaveRequests.FirstOrDefault(x => x.RequestId == leaveRequestID);
                 if(approvalLeaveRequest != null)
                 {
+                    
+                    if (approvalLeaveRequest.EndDate == approvalLeaveRequest.StartDate) { noOfDays = 1; }
+                    else { noOfDays = (int)(approvalLeaveRequest.EndDate - approvalLeaveRequest.StartDate).TotalDays; }
+                    if(noOfDays > 0) { throw new Exception("End date is beyond Start date"); }
                     approvalLeaveRequest.Status = "APPROVED";
                     approvalLeaveRequest.DateResolved = DateTime.Now;
-                    int noOfLeaveRequested = (int)(approvalLeaveRequest.EndDate - approvalLeaveRequest.StartDate).TotalDays;
-                    leaveBalance.updateLeaveBalance(approvalLeaveRequest.EmployeeId, approvalLeaveRequest.LeaveTypeId, noOfLeaveRequested);
+                    leaveBalance.updateLeaveBalance(approvalLeaveRequest.EmployeeId, approvalLeaveRequest.LeaveTypeId, noOfDays);
                     _context.SaveChangesAsync();
                     return true;
                 }
                 return false;
            
+        }
+        public bool denyLeaveRequest(int leaveRequestID)
+        {
+
+            LeaveRequest denyLeaveRequest = _context.LeaveRequests.FirstOrDefault(x => x.RequestId == leaveRequestID);
+            if (denyLeaveRequest != null)
+            {
+                denyLeaveRequest.Status = "DENIED";
+                denyLeaveRequest.DateResolved = DateTime.Now;
+                _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+
         }
         public List<PendingLeaveRequestDTO> GetPendingLeaveRequestsForManager(int managerId)
         {

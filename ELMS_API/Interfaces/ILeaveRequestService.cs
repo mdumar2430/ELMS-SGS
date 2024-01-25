@@ -7,6 +7,7 @@ namespace ELMS_API.Interfaces
     {
         public LeaveRequest addLeaveRequest(LeaveRequest request);
         public bool approveLeaveRequest(int leaveRequestId);
+        public bool denyLeaveRequest(int leaveRequestId);
         public List<PendingLeaveRequestDTO> GetPendingLeaveRequestsForManager(int managerId);
     }
 }
