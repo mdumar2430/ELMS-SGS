@@ -10,7 +10,8 @@ import { PendingLeaveRequest } from '../models/pending-leave-request';
   providedIn: 'root'
 })
 export class LeaveService {
-
+  noOfPendingLeaveRequests : number = 0;
+  
   constructor(private http:HttpClient) { }
 
   getLeaveTypes() : Observable<LeaveType[]>{
@@ -24,4 +25,13 @@ export class LeaveService {
   getPendingLeaveRequest(payload:number): Observable<PendingLeaveRequest[]>{
     return this.http.post<PendingLeaveRequest[]>(BASE_API_URL+'api/LeaveRequests/GetPendingLeaveRequest', payload)
   }
+
+  putApproveLeaveRequest(payload:number):Observable<boolean>{
+    return this.http.put<boolean>(BASE_API_URL+'api/LeaveRequests/ApproveLeaveRequest', payload);
+  }
+
+  putDenyLeaveRequest(payload:number):Observable<boolean>{
+    return this.http.put<boolean>(BASE_API_URL+'api/LeaveRequests/DenyLeaveRequest', payload);
+  }
+
 }

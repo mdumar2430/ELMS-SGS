@@ -6,7 +6,7 @@
             <mat-list-item class="side-menu-item" role="listitem" [routerLink]="[item.routeTo]">
               <div class="px-3 mt-3">
                 @if (item.name == 'Pending Leave Requests') {
-                  <p matBadge="{{items.length}}" matBadgeColor="primary" style="color: aliceblue;">
+                  <p matBadge="{{this.leaveService.noOfPendingLeaveRequests}}" matBadgeColor="primary" style="color: aliceblue;">
                     {{item.name}}
                   </p>
                 }@else {

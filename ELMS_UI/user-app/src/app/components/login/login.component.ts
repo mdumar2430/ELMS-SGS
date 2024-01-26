@@ -43,22 +43,26 @@ export class LoginComponent {
       {
           next: (res)=>{
             if(res){
-              sessionStorage.setItem('isLoggedIn', 'true');
               sessionStorage.setItem('role', res.role);
               sessionStorage.setItem('userId', ''+res.employeeId);
               this.userService.isLoggedIn = true
               this._snackBar.open('Login Successfull', 'Ok', {
                 duration: 2000
               });
-              this._router.navigate(['/leave-request'])
               if(res.role == "Manager"){
                 this.userService.getManagerId(res.employeeId)
                 .subscribe({
                   next: (res) => {
                     sessionStorage.setItem('managerId', ''+res);
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    this._router.navigate(['/leave-request'])
                   }
                 })
               }
+              else{
+                sessionStorage.setItem('isLoggedIn', 'true');
+                this._router.navigate(['/leave-request'])
+              } 
             }
             else{
               this._snackBar.open('Login Failed - Invalid Email or Password', 'Ok', {

@@ -30,8 +30,8 @@
         </div>
       </div>
       <mat-action-row>
-        <button mat-button color="primary" (click)="prevStep()">Approve</button>
-        <button mat-button color="warn" (click)="nextStep()">Deny</button>
+        <button mat-button color="primary" (click)="approveLeaveRequest(list.leaveRequest.requestId)">Approve</button>
+        <button mat-button color="warn" (click)="denyLeaveRequest(list.leaveRequest.requestId)">Deny</button>
       </mat-action-row>
     </mat-expansion-panel>
   </div>
