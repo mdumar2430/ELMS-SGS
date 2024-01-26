@@ -3,10 +3,11 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { UserService } from '../../services/user.service';
 import {MatListModule} from '@angular/material/list';
+import {MatBadgeModule} from '@angular/material/badge';
 @Component({
   selector: 'sidenavbar',
   standalone: true,
-  imports: [RouterOutlet, MatSidenavModule, MatListModule, RouterLink],
+  imports: [RouterOutlet, MatSidenavModule, MatListModule, RouterLink, MatBadgeModule],
   templateUrl: './side-nav-bar.component.html',
   styleUrl: './side-nav-bar.component.css'
 })
@@ -25,7 +26,7 @@ export class SideNavBarComponent {
 
   menuItems_manager = [
     {
-      name : "Approve/Reject Leave Requests",
+      name : "Pending Leave Requests",
       routeTo : "/pendingLeaveRequests"
     },
     {

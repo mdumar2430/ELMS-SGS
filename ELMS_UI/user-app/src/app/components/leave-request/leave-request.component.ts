@@ -67,7 +67,7 @@ export class LeaveRequestComponent {
     payLoad.LeaveTypeId = this.leaveTypeControl.value?.leaveTypeId
     payLoad.StartDate = this.range.controls.start.value?.toISOString();
     payLoad.EndDate = this.range.controls.end.value?.toISOString();
-    payLoad.DateSubmitted = new Date(Date.now()).toISOString()
+    payLoad.dateSubmitted = new Date(Date.now()).toISOString()
     payLoad.Comments = this.reason.value
     this.leaveService.postLeaveRequest(payLoad)
     .subscribe({

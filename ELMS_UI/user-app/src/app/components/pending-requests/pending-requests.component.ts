@@ -48,8 +48,7 @@ export class PendingRequestsComponent {
     this.leaveService.getPendingLeaveRequest(this.managerID)
     .subscribe({
       next: (res) => {
-        this.pendingList = res
-        console.log(this.pendingList)   
+        this.pendingList = res.sort((a,b) => b.leaveRequest.requestId - a.leaveRequest.requestId )
       }
     })
   }
