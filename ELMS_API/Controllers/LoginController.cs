@@ -46,7 +46,8 @@ namespace ELMS_API.Controllers
                             new Claim("Role",employee.Role),
                             new Claim(JwtRegisteredClaimNames.Sub, employee.FirstName+' '+employee.LastName),
                             new Claim(JwtRegisteredClaimNames.Email, employee.Email),
-                            new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
+                            new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
+                            new Claim(ClaimTypes.Role, employee.Role)
                         }),
                         Expires = DateTime.UtcNow.AddMinutes(5),
                         Issuer = issuer,
@@ -59,7 +60,7 @@ namespace ELMS_API.Controllers
                     var token = tokenHandler.CreateToken(tokenDescriptor);
                     var jwtToken = tokenHandler.WriteToken(token);
                     var stringToken = tokenHandler.WriteToken(token);
-                    return Ok(stringToken);
+                    return Ok(new { Token = stringToken });
                 }
                 return StatusCode(404);
             }

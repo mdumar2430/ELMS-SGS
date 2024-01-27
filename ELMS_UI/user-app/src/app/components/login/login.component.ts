@@ -10,14 +10,17 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormControl, Validators, ReactiveFormsModule} from '@angular/forms';
-
+import { JwtHelperService ,JWT_OPTIONS  } from '@auth0/angular-jwt';
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [FormsModule, MatCardModule, MatIconModule,MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
-  providers:[HttpClientModule]
+  providers:[HttpClientModule,
+            { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+    JwtHelperService
+  ]
 })
 
 export class LoginComponent {
@@ -30,6 +33,7 @@ export class LoginComponent {
       private _router: Router
       ,private userService: UserService
       ,private _snackBar: MatSnackBar
+      ,private jwtHelper: JwtHelperService
       ) { }
 
     ngOnInit(){
@@ -43,21 +47,24 @@ export class LoginComponent {
       {
           next: (res)=>{
             if(res){
-              sessionStorage.setItem('role', res.role);
-              sessionStorage.setItem('userId', ''+res.employeeId);
+              const token=res.token;
+              const decodedToken = this.jwtHelper.decodeToken(token);
+              sessionStorage.setItem('role', decodedToken.Role);
+              sessionStorage.setItem('userId',decodedToken.Id);
+              
+              sessionStorage.setItem("jwt",token);
+              // sessionStorage.setItem('role', res.role);
+              // sessionStorage.setItem('userId', ''+res.employeeId);
               this.userService.isLoggedIn = true
               this._snackBar.open('Login Successfull', 'Ok', {
                 duration: 2000
               });
-              if(res.role == "Manager"){
-                this.userService.getManagerId(res.employeeId)
-                .subscribe({
-                  next: (res) => {
-                    sessionStorage.setItem('managerId', ''+res);
-                    sessionStorage.setItem('isLoggedIn', 'true');
-                    this._router.navigate(['/leave-request'])
-                  }
-                })
+              if(decodedToken.Role == "Manager"){
+                sessionStorage.setItem('managerId',decodedToken.ManagerId);
+                console.log(sessionStorage.getItem('managerId'));
+                sessionStorage.setItem('isLoggedIn', 'true');
+                this._router.navigate(['/leave-request'])
+                
               }
               else{
                 sessionStorage.setItem('isLoggedIn', 'true');

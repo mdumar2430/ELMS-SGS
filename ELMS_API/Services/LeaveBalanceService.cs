@@ -17,11 +17,19 @@ namespace ELMS_API.Services
             var leaveBalance = rows.Select(x => x.Balance).Single();
             return leaveBalance;
         }
-        public bool updateLeaveBalance(int empId, int leaveTypeId,int noOfDays)
+        public bool updateLeaveBalance(int empId, int leaveTypeId, int noOfDays)
         {
-            var rows= _appDbContext.LeaveBalances.Where(x => x.EmployeeId == empId && x.LeaveTypeId == leaveTypeId).ToList();
+            var rows = _appDbContext.LeaveBalances.Where(x => x.EmployeeId == empId && x.LeaveTypeId == leaveTypeId).ToList();
             LeaveBalance row = rows.First();
             row.Balance = row.Balance - noOfDays;
+            _appDbContext.SaveChanges();
+            return true;
+        }
+        public bool revertLeaveBalance(int empId, int leaveTypeId, int noOfDays)
+        {
+            var rows = _appDbContext.LeaveBalances.Where(x => x.EmployeeId == empId && x.LeaveTypeId == leaveTypeId).ToList();
+            LeaveBalance row = rows.First();
+            row.Balance = row.Balance + noOfDays;
             _appDbContext.SaveChanges();
             return true;
         }

@@ -10,6 +10,7 @@ import {MatNativeDateModule, NativeDateAdapter} from '@angular/material/core';
 import { PendingLeaveRequest } from '../../models/pending-leave-request';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { HttpHeaders } from '@angular/common/http';
 
 
 @Component({
@@ -49,12 +50,14 @@ export class PendingRequestsComponent {
     this.getPendingList()
   }
   getPendingList(){
+    
     this.leaveService.getPendingLeaveRequest(this.managerID)
     .subscribe({
       next: (res) => {
         this.pendingList = res.sort((a,b) => b.leaveRequest.requestId - a.leaveRequest.requestId )
         this.leaveService.noOfPendingLeaveRequests = res.length
       }
+      
     })
   }
   approveLeaveRequest(id: number){

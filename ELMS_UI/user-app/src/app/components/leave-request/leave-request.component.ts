@@ -78,7 +78,12 @@ export class LeaveRequestComponent {
         this.leaveTypeControl.reset()
         this.reason.reset()
         this.range.reset()
-      }
+      },
+      error: (err)=>{
+        this._snackBar.open(err.error, 'Ok', {
+          duration: 2000
+        });
+    }
     })    
   }
   

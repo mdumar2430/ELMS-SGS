@@ -21,16 +21,19 @@ namespace ELMS_API.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ILeaveRequestService _leaveRequestService;
+        private readonly ILeaveTypeService _leaveTypeService;
 
 
-        public LeaveRequestsController(ILeaveRequestService leaveRequestService, IMapper mapper)
+        public LeaveRequestsController(ILeaveRequestService leaveRequestService, IMapper mapper,ILeaveTypeService leaveTypeService)
         {
             _leaveRequestService=leaveRequestService;
             _mapper = mapper;
+            _leaveTypeService=leaveTypeService;
         }
 
         [HttpPost]
         [Route("AddLeaveRequest")]
+        [Authorize]
         public async Task<ActionResult<LeaveRequest>> PostLeaveRequest(LeaveRequestDTO leaveRequestDto)
         {
             try
@@ -41,7 +44,8 @@ namespace ELMS_API.Controllers
                 {
                     return Ok(result);
                 }
-                return StatusCode(500, "No of leave days not available");
+                string leaveName = _leaveTypeService.getLeaveNameById(leaveRequestDto.LeaveTypeId);
+                return StatusCode(500, "Not enough "+leaveName+"s available");
             }
             catch (Exception ex)
             {
@@ -50,7 +54,8 @@ namespace ELMS_API.Controllers
         }
         [HttpPut]
         [Route("ApproveLeaveRequest")]
-        public ActionResult ApprovePendingLeaveRequest(int leaveRequestId)
+        [Authorize(Roles = "Manager")]
+        public ActionResult ApprovePendingLeaveRequest([FromBody]int leaveRequestId)
         {
             try
             {
@@ -68,7 +73,8 @@ namespace ELMS_API.Controllers
         }
         [HttpPut]
         [Route("DenyLeaveRequest")]
-        public ActionResult DenyPendingLeaveRequest(int leaveRequestId)
+        [Authorize(Roles = "Manager")]
+        public ActionResult DenyPendingLeaveRequest([FromBody] int leaveRequestId)
         {
             bool isApproved = _leaveRequestService.denyLeaveRequest(leaveRequestId);
             if (isApproved)
@@ -78,9 +84,9 @@ namespace ELMS_API.Controllers
             return BadRequest();
         }
         [HttpPost]
-        [Authorize]
         [Route("GetPendingLeaveRequest")]
-        public ActionResult GetPendingLeaveRequest(int managerId)
+        [Authorize(Roles ="Manager")]
+        public ActionResult GetPendingLeaveRequest([FromBody]int managerId)
         {
             var pendingLeaveRequest = _leaveRequestService.GetPendingLeaveRequestsForManager(managerId);
 
