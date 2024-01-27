@@ -31,6 +31,13 @@ namespace ELMS_API.Services
             }
             return leaveTypeList;
         }
+        public string getLeaveNameById(int leaveTypeId)
+        {
+            var rows = _appDbContext.LeaveTypes.Where(x => x.LeaveTypeId == leaveTypeId);
+            var leaveName = rows.Select(x => x.Name).Single();
+            return leaveName;
+
+        }
         public bool leaveTypeExist(int id)
         {
             return _appDbContext.LeaveTypes.Any(e => e.LeaveTypeId == id);

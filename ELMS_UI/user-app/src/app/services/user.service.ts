@@ -16,10 +16,10 @@ export class UserService {
     return this.http.get<User[]>('https://localhost:44334/api/Users',{ responseType: 'json' })
   }
 
-  userLogin(body:any):Observable<User>{
+  userLogin(body:any):Observable<{ token: string }>{
     const buffer = Buffer.from(body.Password, 'utf-8');
     var user={"Email":body.Email,"Password":buffer.toString('base64')}
-    return this.http.post<User>('https://localhost:7034/api/Login', user, {responseType: 'json'})
+    return this.http.post<{ token: string }>('https://localhost:7034/api/Login', user, {responseType: 'json'})
   }
 
   isUserLoggedIn(){

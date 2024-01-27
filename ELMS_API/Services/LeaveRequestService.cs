@@ -19,8 +19,13 @@ namespace ELMS_API.Services
     public LeaveRequest addLeaveRequest(LeaveRequest request)
     {
       int noOfLeaveAvailable = leaveBalance.getLeaveBalance(request.EmployeeId, request.LeaveTypeId);
-      int noOfLeaveRequested = (int)(request.EndDate - request.StartDate).TotalDays+1;
-      if(noOfLeaveAvailable >= noOfLeaveRequested) {
+      int noOfLeaveRequested ;
+
+            if (request.EndDate == request.StartDate) { noOfLeaveRequested = 1; }
+            else { noOfLeaveRequested = (int)(request.EndDate - request.StartDate).TotalDays; }
+            if (noOfLeaveAvailable >= noOfLeaveRequested) {
+                leaveBalance.updateLeaveBalance(request.EmployeeId, request.LeaveTypeId, noOfLeaveRequested);
+                _context.SaveChangesAsync();
                 request.Status = "PENDING";
                 _context.LeaveRequests.Add(request);
         _context.SaveChangesAsync();
@@ -37,10 +42,10 @@ namespace ELMS_API.Services
                     
                     if (approvalLeaveRequest.EndDate == approvalLeaveRequest.StartDate) { noOfDays = 1; }
                     else { noOfDays = (int)(approvalLeaveRequest.EndDate - approvalLeaveRequest.StartDate).TotalDays; }
-                    if(noOfDays > 0) { throw new Exception("End date is beyond Start date"); }
+                    if(noOfDays < 0) { throw new Exception("End date is beyond Start date"); }
                     approvalLeaveRequest.Status = "APPROVED";
                     approvalLeaveRequest.DateResolved = DateTime.Now;
-                    leaveBalance.updateLeaveBalance(approvalLeaveRequest.EmployeeId, approvalLeaveRequest.LeaveTypeId, noOfDays);
+                    //leaveBalance.updateLeaveBalance(approvalLeaveRequest.EmployeeId, approvalLeaveRequest.LeaveTypeId, noOfDays);
                     _context.SaveChangesAsync();
                     return true;
                 }
@@ -49,12 +54,16 @@ namespace ELMS_API.Services
         }
         public bool denyLeaveRequest(int leaveRequestID)
         {
+            int noOfDays;
 
             LeaveRequest denyLeaveRequest = _context.LeaveRequests.FirstOrDefault(x => x.RequestId == leaveRequestID);
+            if (denyLeaveRequest.EndDate == denyLeaveRequest.StartDate) { noOfDays = 1; }
+            else { noOfDays = (int)(denyLeaveRequest.EndDate - denyLeaveRequest.StartDate).TotalDays; }
             if (denyLeaveRequest != null)
             {
                 denyLeaveRequest.Status = "DENIED";
                 denyLeaveRequest.DateResolved = DateTime.Now;
+                leaveBalance.revertLeaveBalance(denyLeaveRequest.EmployeeId, denyLeaveRequest.LeaveTypeId, noOfDays);
                 _context.SaveChangesAsync();
                 return true;
             }
