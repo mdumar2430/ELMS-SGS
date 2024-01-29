@@ -1,55 +1,75 @@
 import { Component } from "@angular/core";
 import { HttpClientModule } from "@angular/common/http";
-import * as forge from 'node-forge';
 import { Router } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 import { UserService } from "../../services/user.service";
 import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatButtonModule} from '@angular/material/button';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {FormControl, Validators, ReactiveFormsModule} from '@angular/forms';
+import { JwtHelperService ,JWT_OPTIONS  } from '@auth0/angular-jwt';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, MatCardModule, MatIconModule],
+  imports: [FormsModule, MatCardModule, MatIconModule,MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
-  providers:[HttpClientModule]
+  providers:[HttpClientModule,
+            { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+    JwtHelperService
+  ]
 })
-export class LoginComponent {
-    userEmail: string = "";
-    userPass: string = "";
-    btnClicked: boolean = false;
-    
 
-    publicKey: string = `-----BEGIN PUBLIC KEY-----
-    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAskgPKBcNpz71mi4NSYa5
-    mazJrO0WZim7T2yy7qPxk2NqQE7OmWWakLJcaeUYnI0kO3yC57vck66RPCjKxWuW
-    SGZ7dHXe0bWb5IXjcT4mNdnUIalR+lV8czsoH/wDUvkQdG1SJ+IxzW64WvoaCRZ+
-    /4wBF2cSUh9oLwGEXiodUJ9oJXFZVPKGCEjPcBI0vC2ADBRmVQ1sKsZg8zbHN+gu
-    U9rPLFzN4YNrCnEsSezVw/W1FKVS8J/Xx4HSSg7AyVwniz8eHi0e3a8VzFg+H09I
-    5wK+w39sjDYfAdnJUkr6PjtSbN4/Sg/NMkKB2Ngn8oj7LCfe/7RNqIdiS+dQuSFg
-    eQIDAQAB
-    -----END PUBLIC KEY-----`;
-    constructor(private _router: Router, private userService: UserService, private _snackBar: MatSnackBar) { }
+export class LoginComponent {
+
+    email = new FormControl('', [Validators.required, Validators.email]);
+    password = new FormControl('', [Validators.required, Validators.minLength(8)]);
+    hide = true;
+
+    constructor( 
+      private _router: Router
+      ,private userService: UserService
+      ,private _snackBar: MatSnackBar
+      ,private jwtHelper: JwtHelperService
+      ) { }
 
     ngOnInit(){
       this.userService.isLoggedIn = false
     }
 
     login() {
-      var rsa = forge.pki.publicKeyFromPem(this.publicKey);
-      var encryptedPassword = window.btoa(rsa.encrypt(this.userPass));
-      var payload = { "Email": this.userEmail, "Password": encryptedPassword };
+      var payload = { "Email": this.email.value, "Password": this.password.value };
       this.userService.userLogin(payload)
       .subscribe(
       {
           next: (res)=>{
             if(res){
+              const token=res.token;
+              const decodedToken = this.jwtHelper.decodeToken(token);
+              sessionStorage.setItem('role', decodedToken.Role);
+              sessionStorage.setItem('userId',decodedToken.Id);
+              
+              sessionStorage.setItem("jwt",token);
+              // sessionStorage.setItem('role', res.role);
+              // sessionStorage.setItem('userId', ''+res.employeeId);
               this.userService.isLoggedIn = true
               this._snackBar.open('Login Successfull', 'Ok', {
                 duration: 2000
               });
-              this._router.navigate(['/users'])
+              if(decodedToken.Role == "Manager"){
+                sessionStorage.setItem('managerId',decodedToken.ManagerId);
+                console.log(sessionStorage.getItem('managerId'));
+                sessionStorage.setItem('isLoggedIn', 'true');
+                this._router.navigate(['/leave-request'])
+                
+              }
+              else{
+                sessionStorage.setItem('isLoggedIn', 'true');
+                this._router.navigate(['/leave-request'])
+              } 
             }
             else{
               this._snackBar.open('Login Failed - Invalid Email or Password', 'Ok', {
@@ -65,8 +85,19 @@ export class LoginComponent {
       }
       )
     }
+    getEmailErrorMessage() {
+      if (this.email.hasError('required')) {
+        return 'You must enter a value';
+      }
+  
+      return this.email.hasError('email') ? 'Not a valid email' : '';
+    }
 
-    logout() {
-        this.btnClicked = false;
+    getPasswordErrorMessage() {
+      if (this.password.hasError('required')) {
+        return 'You must enter a value';
+      }
+  
+      return this.password.hasError('minlength') ? 'Password must contain 8 characters.' : '';
     }
 }

@@ -1,0 +1,65 @@
+<div class="container-fluid" style="background-color: #caf1f1; height:91vh;">
+  <mat-card class="p-2 shadow-lg rounded-2 w-100 container " style="width: 400px;">
+    <h3 class="text-center my-4">Leave Request Form</h3>
+    <mat-card-content>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field class="mb-3 w-75">
+              <mat-label>Select Leave Type</mat-label>
+              <mat-select [formControl]="leaveTypeControl" required>
+                <mat-option>--</mat-option>
+                @for (leaveType of leaveTypes; track leaveType) {
+                <mat-option [value]="leaveType">{{leaveType.name}}</mat-option>
+                }
+              </mat-select>
+              @if (leaveTypeControl.hasError('required')) {
+              <mat-error>Please choose a leave type</mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field class="w-75">
+              <mat-label>Enter a date range</mat-label>
+              <mat-date-range-input [min]="minDate" [formGroup]="range" [rangePicker]="picker">
+                <input matStartDate formControlName="start" placeholder="Start date">
+                <input matEndDate formControlName="end" placeholder="End date">
+              </mat-date-range-input>
+              <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker></mat-date-range-picker>
+
+              @if (range.controls.start.hasError('matStartDateInvalid')) {
+              <mat-error>Invalid start date</mat-error>
+              }
+              @if (range.controls.end.hasError('matEndDateInvalid')) {
+              <mat-error>Invalid end date</mat-error>
+              }
+              @if (range.controls.start.hasError('required')) {
+              <mat-error>Start Date Required</mat-error>
+              }
+              @if (range.controls.end.hasError('required')) {
+              <mat-error>End Date Required</mat-error>
+              }
+
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="w-50">
+              <mat-label>Reason For Leave</mat-label>
+              <textarea matInput [formControl]="reason"></textarea>
+
+              @if (reason.hasError('required')){
+              <mat-error>Reason Required</mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <button [disabled]="leaveTypeControl.invalid || range.invalid || reason.invalid" class="d-block " type="submit"
+        class="btn btn-primary w-25 my-2" (click)="sendRequest()">Submit</button>
+    </mat-card-content>
+  </mat-card>
+</div>

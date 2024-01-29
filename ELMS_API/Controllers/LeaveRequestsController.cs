@@ -9,6 +9,9 @@ using ELMS_API.Data;
 using ELMS_API.Models;
 using AutoMapper;
 using ELMS_API.DTO;
+using ELMS_API.Interfaces;
+using ELMS_API.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ELMS_API.Controllers
 {
@@ -16,98 +19,79 @@ namespace ELMS_API.Controllers
     [ApiController]
     public class LeaveRequestsController : ControllerBase
     {
-        private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly ILeaveRequestService _leaveRequestService;
+        private readonly ILeaveTypeService _leaveTypeService;
 
-        public LeaveRequestsController(AppDbContext context, IMapper mapper)
+
+        public LeaveRequestsController(ILeaveRequestService leaveRequestService, IMapper mapper,ILeaveTypeService leaveTypeService)
         {
-            _context = context;
+            _leaveRequestService=leaveRequestService;
             _mapper = mapper;
+            _leaveTypeService=leaveTypeService;
         }
 
-        // GET: api/LeaveRequests
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<LeaveRequest>>> GetLeaveRequests()
-        {
-            return await _context.LeaveRequests.ToListAsync();
-        }
-
-        // GET: api/LeaveRequests/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<LeaveRequest>> GetLeaveRequest(int id)
-        {
-            var leaveRequest = await _context.LeaveRequests.FindAsync(id);
-
-            if (leaveRequest == null)
-            {
-                return NotFound();
-            }
-
-            return leaveRequest;
-        }
-
-        // PUT: api/LeaveRequests/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutLeaveRequest(int id, LeaveRequest leaveRequest)
-        {
-            if (id != leaveRequest.RequestId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(leaveRequest).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!LeaveRequestExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/LeaveRequests
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Route("AddLeaveRequest")]
+        [Authorize]
         public async Task<ActionResult<LeaveRequest>> PostLeaveRequest(LeaveRequestDTO leaveRequestDto)
         {
-            LeaveRequest leaveRequest = _mapper.Map<LeaveRequest>(leaveRequestDto);
-            _context.LeaveRequests.Add(leaveRequest);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetLeaveRequest", new { id = leaveRequest.RequestId }, leaveRequest);
-        }
-
-        // DELETE: api/LeaveRequests/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteLeaveRequest(int id)
-        {
-            var leaveRequest = await _context.LeaveRequests.FindAsync(id);
-            if (leaveRequest == null)
+            try
             {
-                return NotFound();
+                LeaveRequest leaveRequest = _mapper.Map<LeaveRequest>(leaveRequestDto);
+                LeaveRequest result = _leaveRequestService.addLeaveRequest(leaveRequest);
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+                string leaveName = _leaveTypeService.getLeaveNameById(leaveRequestDto.LeaveTypeId);
+                return StatusCode(500, "Not enough "+leaveName+"s available");
             }
-
-            _context.LeaveRequests.Remove(leaveRequest);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
-
-        private bool LeaveRequestExists(int id)
+        [HttpPut]
+        [Route("ApproveLeaveRequest")]
+        [Authorize(Roles = "Manager")]
+        public ActionResult ApprovePendingLeaveRequest([FromBody]int leaveRequestId)
         {
-            return _context.LeaveRequests.Any(e => e.RequestId == id);
+            try
+            {
+                bool isApproved = _leaveRequestService.approveLeaveRequest(leaveRequestId);
+                if (isApproved)
+                {
+                    return Ok(isApproved);
+                }
+                return StatusCode(404, null);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+        [HttpPut]
+        [Route("DenyLeaveRequest")]
+        [Authorize(Roles = "Manager")]
+        public ActionResult DenyPendingLeaveRequest([FromBody] int leaveRequestId)
+        {
+            bool isApproved = _leaveRequestService.denyLeaveRequest(leaveRequestId);
+            if (isApproved)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+        [HttpPost]
+        [Route("GetPendingLeaveRequest")]
+        [Authorize(Roles ="Manager")]
+        public ActionResult GetPendingLeaveRequest([FromBody]int managerId)
+        {
+            var pendingLeaveRequest = _leaveRequestService.GetPendingLeaveRequestsForManager(managerId);
+
+            return Ok(pendingLeaveRequest);
+        }
+        
     }
 }

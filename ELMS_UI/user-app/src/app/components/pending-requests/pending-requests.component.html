@@ -1,0 +1,38 @@
+<mat-accordion class="example-headers-align">
+  <div *ngFor="let list of pendingList;">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{list.employeeName}}
+        </mat-panel-title>
+        <mat-panel-description>
+          {{list.leaveRequest.dateSubmitted | date}}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 col-md-12">
+            <h6>Reason:</h6>
+            <p>{{list.leaveRequest.comments}}</p>
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <h6>From</h6>
+            <p>{{list.leaveRequest.startDate | date}}</p>
+            <h6>To</h6>
+            <p>{{list.leaveRequest.endDate | date}}</p>
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <h6>Type:</h6>
+            <p>Placeholder</p>
+          </div>
+        </div>
+      </div>
+      <mat-action-row>
+        <button mat-button color="primary" (click)="approveLeaveRequest(list.leaveRequest.requestId)">Approve</button>
+        <button mat-button color="warn" (click)="denyLeaveRequest(list.leaveRequest.requestId)">Deny</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </div>
+</mat-accordion>

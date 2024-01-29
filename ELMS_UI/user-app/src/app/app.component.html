@@ -1,4 +1,10 @@
 <app-header></app-header>
-<sidenavbar class="mt-5"></sidenavbar>
+@if (userService.isUserLoggedIn()) {
+    <sidenavbar  class="mt-5"></sidenavbar>
+}
+@else {
+    <router-outlet></router-outlet>
+}
+
 
 

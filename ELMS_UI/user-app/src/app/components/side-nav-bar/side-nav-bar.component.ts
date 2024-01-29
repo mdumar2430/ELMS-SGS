@@ -1,18 +1,65 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { UserService } from '../../services/user.service';
 import {MatListModule} from '@angular/material/list';
+import {MatBadgeModule} from '@angular/material/badge';
+import { LeaveService } from '../../services/leave.service';
 @Component({
   selector: 'sidenavbar',
   standalone: true,
-  imports: [RouterOutlet, MatSidenavModule, MatListModule],
+  imports: [RouterOutlet, MatSidenavModule, MatListModule, RouterLink, MatBadgeModule],
   templateUrl: './side-nav-bar.component.html',
   styleUrl: './side-nav-bar.component.css'
 })
 export class SideNavBarComponent {
-  
-  constructor(public userService:UserService){
+  manager_id = Number(sessionStorage.getItem('managerId'))
+  pendingList_count :any= 'abc'
+  menuItems_user = [
+  {
+    name : "Request Leave",
+    routeTo : "/leave-request"
+  },
+  {
+    name: "Leave Status",
+    routeTo : "/"
+  }
+]
 
+  menuItems_manager = [
+    {
+      name : "Pending Leave Requests",
+      routeTo : "/pendingLeaveRequests"
+    },
+    {
+      name : "Request Leave",
+      routeTo : "/leave-request"
+    },
+    {
+      name: "Leave Status",
+      routeTo : "/"
+      
+    }
+  ]
+
+  items = this.getMenuItems();
+
+  constructor(public userService:UserService, public leaveService:LeaveService){
+
+  }
+
+  ngOnInit(){
+    this.leaveService.getPendingLeaveRequest(this.manager_id)
+    .subscribe({
+      next: (res) => {
+        this.leaveService.noOfPendingLeaveRequests = res.length
+      }
+    })
+  }
+
+  getMenuItems(){
+    if(sessionStorage.getItem('role')=='Manager')
+      return this.menuItems_manager;
+    return this.menuItems_user;
   }
 }
