@@ -92,6 +92,19 @@ namespace ELMS_API.Controllers
 
             return Ok(pendingLeaveRequest);
         }
-        
+        [HttpPost]
+        [Route("GetLeaveRequestById")]
+        public ActionResult GetLeaveRequestById([FromBody] int employeeId)
+        {
+            try
+            {
+                var leaveRequestList = _leaveRequestService.getLeaveRequestById(employeeId);
+                return Ok(leaveRequestList);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

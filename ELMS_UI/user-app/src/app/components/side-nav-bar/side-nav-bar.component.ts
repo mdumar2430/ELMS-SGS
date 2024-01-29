@@ -19,6 +19,14 @@ export class SideNavBarComponent {
   {
     name : "Request Leave",
     routeTo : "/leave-request"
+  },
+  {
+    name : "My Leave Status",
+    routeTo : "/leaveStatus"
+  },
+  {
+    name : "Leave Info",
+    routeTo : "/leaveInfo"
   }
 ]
 
@@ -30,6 +38,14 @@ export class SideNavBarComponent {
     {
       name : "Request Leave",
       routeTo : "/leave-request"
+    },
+    {
+      name : "My Leave Status",
+      routeTo : "/leaveStatus"
+    },
+    {
+      name : "Leave Info",
+      routeTo : "/leaveInfo"
     }
   ]
 
@@ -40,12 +56,14 @@ export class SideNavBarComponent {
   }
 
   ngOnInit(){
-    this.leaveService.getPendingLeaveRequest(this.manager_id)
-    .subscribe({
-      next: (res) => {
-        this.leaveService.noOfPendingLeaveRequests = res.length
-      }
-    })
+    if(this.manager_id>0){
+      this.leaveService.getPendingLeaveRequest(this.manager_id)
+      .subscribe({
+        next: (res) => {
+          this.leaveService.noOfPendingLeaveRequests = res.length
+        }
+      })
+    }
   }
 
   getMenuItems(){
