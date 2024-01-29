@@ -51,7 +51,6 @@ export class LoginComponent {
               const decodedToken = this.jwtHelper.decodeToken(token);
               sessionStorage.setItem('role', decodedToken.Role);
               sessionStorage.setItem('userId',decodedToken.Id);
-              
               sessionStorage.setItem("jwt",token);
               // sessionStorage.setItem('role', res.role);
               // sessionStorage.setItem('userId', ''+res.employeeId);
@@ -62,12 +61,12 @@ export class LoginComponent {
               if(decodedToken.Role == "Manager"){
                 sessionStorage.setItem('managerId',decodedToken.ManagerId);
                 sessionStorage.setItem('isLoggedIn', 'true');
-                this._router.navigate(['/leave-request'])
+                this._router.navigate(['/leaveInfo'])
                 
               }
               else{
                 sessionStorage.setItem('isLoggedIn', 'true');
-                this._router.navigate(['/leave-request'])
+                this._router.navigate(['/leaveInfo'])
               } 
             }
             else{

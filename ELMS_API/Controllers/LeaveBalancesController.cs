@@ -9,6 +9,7 @@ using ELMS_API.Data;
 using ELMS_API.Models;
 using ELMS_API.DTO;
 using AutoMapper;
+using ELMS_API.Interfaces;
 
 namespace ELMS_API.Controllers
 {
@@ -18,11 +19,13 @@ namespace ELMS_API.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly ILeaveBalanceService _leaveBalanceService;
 
-        public LeaveBalancesController(AppDbContext context, IMapper mapper)
+        public LeaveBalancesController(AppDbContext context, IMapper mapper,ILeaveBalanceService leaveBalanceService)
         {
             _context = context;
             _mapper = mapper;
+            _leaveBalanceService = leaveBalanceService;
         }
 
         // GET: api/LeaveBalances
@@ -109,5 +112,20 @@ namespace ELMS_API.Controllers
         {
             return _context.LeaveBalances.Any(e => e.BalanceId == id);
         }
+    
+    [HttpPost]
+    [Route("GetLeaveBalanceById")]
+    public ActionResult GetLeaveBalanceById([FromBody] int employeeId)
+    {
+        try
+        {
+            var leaveBlanceList = _leaveBalanceService.getLeaveBalanceById(employeeId);
+            return Ok(leaveBlanceList);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
+}
 }

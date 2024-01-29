@@ -48,4 +48,11 @@ export class LeaveService {
     return this.http.put<boolean>(BASE_API_URL+'api/LeaveRequests/DenyLeaveRequest', payload);
   }
 
+  getLeaveStatus(payload:number):Observable<any>{
+    return this.http.post<any>(BASE_API_URL+'api/LeaveRequests/GetLeaveRequestById', payload)
+  }
+
+  getLeaveInfo(payload:number):Observable<any>{
+    return this.http.post<any>(BASE_API_URL+'api/LeaveBalances/GetLeaveBalanceById', payload)
+  }
 }

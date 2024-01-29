@@ -1,0 +1,26 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
+    <ng-container matColumnDef="Leave Type">
+      <th mat-header-cell *matHeaderCellDef> Leave Type </th>
+      <td mat-cell *matCellDef="let element">
+        @if (element.leaveTypeId == 1) {
+            Sick Leave
+        }
+        @if (element.leaveTypeId == 2) {
+            Casual Leave
+        }
+        @if (element.leaveTypeId == 3) {
+            Annual Leave
+        }
+    </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="Balances">
+      <th mat-header-cell *matHeaderCellDef> Balances </th>
+      <td mat-cell *matCellDef="let element"> {{element.balance}} </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  
+  

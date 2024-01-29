@@ -1,8 +1,10 @@
-﻿using ELMS_API.Data;
+﻿using AutoMapper;
+using ELMS_API.Data;
 using ELMS_API.DTO;
 using ELMS_API.Interfaces;
 using ELMS_API.Models;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Generic;
 using System.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -13,11 +15,13 @@ namespace ELMS_API.Services
         private readonly IAppDbContext _context;
         private readonly ILeaveBalanceService leaveBalance;
         private readonly ILeaveTypeService _leaveTypeService;
-    public LeaveRequestService(IAppDbContext context,ILeaveBalanceService leaveBalance,ILeaveTypeService leaveTypeService)
+        private readonly IMapper _mapper;
+    public LeaveRequestService(IAppDbContext context,ILeaveBalanceService leaveBalance,ILeaveTypeService leaveTypeService,IMapper mapper)
     {
         _context= context;
         this.leaveBalance= leaveBalance;
             _leaveTypeService= leaveTypeService;
+            _mapper= mapper;
     }
     public LeaveRequest addLeaveRequest(LeaveRequest request)
     {
@@ -101,6 +105,13 @@ namespace ELMS_API.Services
                 .ToList();
 
             return pendingLeaveRequests;
+        }
+        public List<LeaveRequestDTO> getLeaveRequestById(int employeeID)
+        {
+            Employee employee=_context.Employees.FirstOrDefault(x=>x.EmployeeId== employeeID);
+            if (employee == null) { throw new Exception("Employee does not exist"); }
+            List<LeaveRequestDTO> leaveRequests = _mapper.Map < List < LeaveRequestDTO >> (_context.LeaveRequests.Where(lr=>lr.EmployeeId==employeeID).ToList());
+            return leaveRequests;
         }
 
         public static int CalculateWeekdays(DateTime startDate, DateTime endDate)
