@@ -12,17 +12,19 @@ namespace ELMS_API.Services
     {
         private readonly IAppDbContext _context;
         private readonly ILeaveBalanceService leaveBalance;
-    public LeaveRequestService(IAppDbContext context,ILeaveBalanceService leaveBalance)
+        private readonly ILeaveTypeService _leaveTypeService;
+    public LeaveRequestService(IAppDbContext context,ILeaveBalanceService leaveBalance,ILeaveTypeService leaveTypeService)
     {
         _context= context;
         this.leaveBalance= leaveBalance;
+            _leaveTypeService= leaveTypeService;
     }
     public LeaveRequest addLeaveRequest(LeaveRequest request)
     {
             bool isOverlap = _context.LeaveRequests
             .Any(lr =>
             lr.EmployeeId == request.EmployeeId &&
-            //lr.Status == "APPROVED" && // Consider only approved leave requests
+            lr.Status != "DENIED" && // Consider only approved leave requests
             ((lr.StartDate <= request.StartDate && request.StartDate <= lr.EndDate) ||
              (lr.StartDate <= request.EndDate && request.EndDate <= lr.EndDate) ||
              (request.StartDate <= lr.StartDate && lr.EndDate <= request.EndDate)));
@@ -91,13 +93,16 @@ namespace ELMS_API.Services
                 .Where(joinResult => joinResult.TeamMember.ManagerId == managerId && joinResult.LeaveRequest.Status == "PENDING")
                 .Select(joinResult => new PendingLeaveRequestDTO
                 {
+                    
                     EmployeeName = $"{joinResult.LeaveRequest.Employee.FirstName} {joinResult.LeaveRequest.Employee.LastName}",
                     LeaveRequest = joinResult.LeaveRequest,
+                    LeaveTypeName = _leaveTypeService.getLeaveNameById(joinResult.LeaveRequest.LeaveTypeId),
                 })
                 .ToList();
 
             return pendingLeaveRequests;
         }
+
         public static int CalculateWeekdays(DateTime startDate, DateTime endDate)
         {
             int weekdays = 0;

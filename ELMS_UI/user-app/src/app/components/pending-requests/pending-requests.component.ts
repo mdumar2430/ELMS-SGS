@@ -29,19 +29,7 @@ import { HttpHeaders } from '@angular/common/http';
 export class PendingRequestsComponent {
   managerID : number = Number(sessionStorage.getItem('managerId'))
   pendingList : any[] = []
-  step = 0;
 
-  setStep(index: number) {
-    this.step = index;
-  }
-
-  nextStep() {
-    this.step++;
-  }
-
-  prevStep() {
-    this.step--;
-  }
   constructor(private leaveService:LeaveService, private _router:Router){
 
   }
@@ -54,6 +42,7 @@ export class PendingRequestsComponent {
     this.leaveService.getPendingLeaveRequest(this.managerID)
     .subscribe({
       next: (res) => {
+        
         this.pendingList = res.sort((a,b) => b.leaveRequest.requestId - a.leaveRequest.requestId )
         this.leaveService.noOfPendingLeaveRequests = res.length
       }
@@ -61,11 +50,9 @@ export class PendingRequestsComponent {
     })
   }
   approveLeaveRequest(id: number){
-    console.log('id: '+id)
     this.leaveService.putApproveLeaveRequest(id)
     .subscribe({
       next: (res) => {
-        console.log(res)
         this.getPendingList()
       }
     })
@@ -73,14 +60,11 @@ export class PendingRequestsComponent {
   }
 
   denyLeaveRequest(id: number){
-    console.log('id: '+id)
     this.leaveService.putDenyLeaveRequest(id)
     .subscribe({
       next: (res) => {
-        console.log(res)
         this.getPendingList()
       }
     })
-    
   }
 }
