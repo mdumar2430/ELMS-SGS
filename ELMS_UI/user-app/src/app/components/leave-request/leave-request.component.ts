@@ -88,7 +88,6 @@ export class LeaveRequestComponent {
     payLoad.dateSubmitted = `${year}-${month}-${day}`
 
     payLoad.Comments = this.reason.value
-    console.log(payLoad)
     this.leaveService.postLeaveRequest(payLoad)
     .subscribe({
       next : (res) => {

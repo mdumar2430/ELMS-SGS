@@ -19,10 +19,6 @@ export class SideNavBarComponent {
   {
     name : "Request Leave",
     routeTo : "/leave-request"
-  },
-  {
-    name: "Leave Status",
-    routeTo : "/"
   }
 ]
 
@@ -34,11 +30,6 @@ export class SideNavBarComponent {
     {
       name : "Request Leave",
       routeTo : "/leave-request"
-    },
-    {
-      name: "Leave Status",
-      routeTo : "/"
-      
     }
   ]
 

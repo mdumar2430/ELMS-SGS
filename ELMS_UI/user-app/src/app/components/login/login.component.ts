@@ -61,7 +61,6 @@ export class LoginComponent {
               });
               if(decodedToken.Role == "Manager"){
                 sessionStorage.setItem('managerId',decodedToken.ManagerId);
-                console.log(sessionStorage.getItem('managerId'));
                 sessionStorage.setItem('isLoggedIn', 'true');
                 this._router.navigate(['/leave-request'])
                 
