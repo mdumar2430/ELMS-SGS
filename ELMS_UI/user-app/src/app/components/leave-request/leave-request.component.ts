@@ -15,11 +15,6 @@ import { DatePipe } from '@angular/common';
 import { LeaveRequest } from '../../models/leave-request.model';
 
 
-interface Animal {
-  name: string;
-  sound: string;
-}
-
 @Component({
   selector: 'app-leave-request',
   standalone: true,
@@ -34,9 +29,11 @@ export class LeaveRequestComponent {
   reason = new FormControl('', Validators.required);
   leaveTypes:LeaveType[] = []
   range = new FormGroup({
-    start: new FormControl<Date | null>(null),
-    end: new FormControl<Date | null>(null),
+    start: new FormControl<Date | null>(null, [Validators.required]),
+    end: new FormControl<Date | null>(null, [Validators.required]),
   });
+  minDate = new Date()
+  
 
   constructor(
     private leaveService:LeaveService
@@ -45,6 +42,12 @@ export class LeaveRequestComponent {
     ){
 
   }
+
+  myFilter = (d: Date | null): boolean => {
+    const day = (d || new Date()).getDay();
+    // Prevent Saturday and Sunday from being selected.
+    return day !== 0 && day !== 6;
+  };
 
   ngOnInit(){
     this.getLeaveTypes()
@@ -65,10 +68,27 @@ export class LeaveRequestComponent {
     var payLoad : LeaveRequest = new LeaveRequest()
     payLoad.EmployeeId = Number(sessionStorage.getItem('userId'))
     payLoad.LeaveTypeId = this.leaveTypeControl.value?.leaveTypeId
-    payLoad.StartDate = this.range.controls.start.value?.toISOString();
-    payLoad.EndDate = this.range.controls.end.value?.toISOString();
-    payLoad.dateSubmitted = new Date(Date.now()).toISOString()
+
+    const start_date = new Date(this.range.controls.start.value || '');
+    var year = start_date.getFullYear();
+    var month = String(start_date.getMonth() + 1).padStart(2, '0');
+    var day = String(start_date.getDate()).padStart(2, '0');
+    payLoad.StartDate = `${year}-${month}-${day}`;
+
+    const end_date = new Date(this.range.controls.end.value || '');
+    year = end_date.getFullYear();
+    month = String(end_date.getMonth() + 1).padStart(2, '0');
+    day = String(end_date.getDate()).padStart(2, '0');
+    payLoad.EndDate = `${year}-${month}-${day}`;
+
+    const submitted_date = new Date();
+    year = submitted_date.getFullYear();
+    month = String(submitted_date.getMonth() + 1).padStart(2, '0');
+    day = String(submitted_date.getDate()).padStart(2, '0');
+    payLoad.dateSubmitted = `${year}-${month}-${day}`
+
     payLoad.Comments = this.reason.value
+    console.log(payLoad)
     this.leaveService.postLeaveRequest(payLoad)
     .subscribe({
       next : (res) => {
